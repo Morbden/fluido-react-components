@@ -1,0 +1,56 @@
+{
+  "name": "@fluido/react-components",
+  "version": "0.1.2",
+  "description": "Fluido webapp components",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "private": false,
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Morbden/fluido-react-components.git"
+  },
+  "keywords": [
+    "fluido",
+    "components",
+    "react"
+  ],
+  "author": "Morbden",
+  "license": "MIT",
+  "scripts": {
+    "build:types": "tsc --emitDeclarationOnly --declarationDir dist",
+    "build:dist": "babel src --out-dir dist --extensions \".ts,.tsx\"",
+    "build": "run-p build:types build:dist",
+    "pub": "npm publish --access public"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.13.0",
+    "@babel/core": "^7.13.8",
+    "@babel/plugin-proposal-class-properties": "^7.13.0",
+    "@babel/preset-env": "^7.13.9",
+    "@babel/preset-react": "^7.12.13",
+    "@babel/preset-typescript": "^7.13.0",
+    "@hookstate/core": "^3.0.6",
+    "@popperjs/core": "^2.9.0",
+    "@types/classnames": "^2.2.11",
+    "@types/node": "^14.14.31",
+    "@types/react": "^17.0.2",
+    "@types/styled-components": "^5.1.7",
+    "babel-plugin-styled-components": "^1.12.0",
+    "classnames": "^2.2.6",
+    "dayjs": "^1.10.4",
+    "deep-equal": "^2.0.5",
+    "deepmerge": "^4.2.2",
+    "framer-motion": "^3.9.1",
+    "inputmask": "^5.0.5",
+    "npm-run-all": "^4.1.5",
+    "react": "^17.0.1",
+    "react-hook-form": "^6.15.4",
+    "react-icons": "^4.2.0",
+    "react-popper": "^2.2.4",
+    "react-portal": "^4.2.1",
+    "sass": "^1.32.8",
+    "styled-components": "^5.2.1",
+    "typescript": "^4.2.2",
+    "uid": "^2.0.0"
+  }
+}

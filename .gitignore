@@ -1,0 +1,28 @@
+# dependencies
+/node_modules
+*.pnp*
+
+# testing
+/coverage
+*.test*
+
+# production
+/out
+/build
+/dist
+/lib
+/types
+/components
+/hooks
+/managers
+/utils
+
+# misc
+.DS_Store
+*.pem
+
+# debug
+*.log*
+
+# local env files
+*.env*
