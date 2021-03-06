@@ -1,4 +1,4 @@
-import { useRipple } from '../../hooks'
+import { useRipple } from '@fluido/react-effects'
 import cx from 'classnames'
 import { forwardRef, ReactElement } from 'react'
 import styled from 'styled-components'

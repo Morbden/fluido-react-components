@@ -2,17 +2,25 @@ import { State } from '@hookstate/core'
 import cx from 'classnames'
 import { useEffect } from 'react'
 import styled from 'styled-components'
-import { SnackbarBaseProps } from '../../hooks/snackbar'
 import Button from '../button'
 
-interface SnackbarProps {
-  snack?: State<SnackbarBaseProps>
+export interface SnackbarBaseProps {
+  action?: VoidFunction
+  actionLabel?: string
+  duration?: number
+  icon?: React.ReactNode
   message?: string
+  type?: 'default' | 'error' | 'warning' | 'success'
+}
+
+interface SnackbarProps {
+  action?: VoidFunction
   actionLabel?: string
   icon?: React.ReactNode
-  action?: VoidFunction
-  type?: 'default' | 'error' | 'warning' | 'success'
+  message?: string
   onClose?: VoidFunction
+  snack?: State<SnackbarBaseProps>
+  type?: 'default' | 'error' | 'warning' | 'success'
 }
 
 const StyledSnackbar = styled.div`

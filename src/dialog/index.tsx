@@ -6,7 +6,7 @@ import { SubmitHandler } from 'react-hook-form'
 import { MdClose } from 'react-icons/md'
 import { Portal } from 'react-portal'
 import styled from 'styled-components'
-import { useMediaQuery } from '../../utils'
+import { useMediaQuery } from '@fluido/react-utils'
 import IconButton from '../icon-button'
 import DialogActions from './dialog-actions'
 
