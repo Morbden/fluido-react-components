@@ -6,15 +6,16 @@
     "esModuleInterop": true,
     "declaration": true,
     "isolatedModules": true,
-    "jsx": "preserve",
+    "jsx": "react-jsx",
     "module": "esnext",
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": false,
-    "target": "esnext"
+    "target": "esnext",
+    "outDir": "dist"
   },
-  "exclude": ["node_modules"],
+  "exclude": ["node_modules", "src/**/*.story.*"],
   "include": [
     "src/**/*.ts",
     "src/**/*.tsx",

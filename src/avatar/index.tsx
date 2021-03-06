@@ -2,7 +2,7 @@ import { forwardRef } from 'react'
 import styled from 'styled-components'
 import { useRipple } from '@fluido/react-effects'
 
-interface AvatarProps {
+export interface AvatarProps {
   picture?: string
   name?: string
   size?: number

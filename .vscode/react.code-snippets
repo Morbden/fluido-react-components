@@ -86,5 +86,24 @@
       "",
       "export default use${TM_FILENAME_BASE/.*/${0:/pascalcase}/}"
     ]
+  },
+  "Fluido - Storybook": {
+    "scope": "javascriptreact,typescriptreact",
+    "prefix": "flsb",
+    "body": [
+      "import { Meta, Story } from '@storybook/react'",
+      "import ${TM_DIRECTORY/^.+[\\\\\\/](.*)$/${1:/pascalcase}/}, { ${TM_DIRECTORY/^.+[\\\\\\/](.*)$/${1:/pascalcase}/}Props } from './index'",
+      "",
+      "const ComponentMeta: Meta = {",
+      "  title: '${TM_DIRECTORY/^.+[\\\\\\/](.*)$/${1:/pascalcase}/}',",
+      "}",
+      "",
+      "export default ComponentMeta",
+      "",
+      "const Template: Story<${TM_DIRECTORY/^.+[\\\\\\/](.*)$/${1:/pascalcase}/}Props> = (args) => <${TM_DIRECTORY/^.+[\\\\\\/](.*)$/${1:/pascalcase}/} {...args} />",
+      "",
+      "export const FirstState = Template.bind({})",
+      "FirstState.args = {$1}"
+    ]
   }
 }
