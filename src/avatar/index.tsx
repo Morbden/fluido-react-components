@@ -1,6 +1,7 @@
 import { forwardRef } from 'react'
 import styled from 'styled-components'
 import { useRipple } from '@fluido/react-effects'
+import Color from 'color'
 
 export interface AvatarProps {
   picture?: string
@@ -41,15 +42,28 @@ const Avatar = forwardRef<HTMLButtonElement, AvatarProps>(
       name = '',
       size = 48,
       className,
-      color,
-      backgroundColor,
+      color = '',
+      backgroundColor = 'random',
       ...props
     },
     fRef,
   ) => {
+    let cBackgroundColor: Color
+    let cColor: Color
+
+    try {
+      cBackgroundColor = Color(backgroundColor)
+    } catch (err) {
+      cBackgroundColor = Color('transparent')
+    }
+    try {
+      cColor = Color(color)
+    } catch (err) {
+      cColor = Color('#222')
+    }
+
     const { anchor } = useRipple({
       toCenter: true,
-      smallSize: true,
     })
 
     const handleRef = (node: HTMLButtonElement) => {
@@ -66,7 +80,15 @@ const Avatar = forwardRef<HTMLButtonElement, AvatarProps>(
     }
 
     return (
-      <StyledButton ref={handleRef} className={className} {...props}>
+      <StyledButton
+        ref={handleRef}
+        style={{
+          backgroundColor: cBackgroundColor.rgb().string(),
+          color:
+            backgroundColor !== 'random' ? cColor.rgb().string() : 'inherit',
+        }}
+        className={className}
+        {...props}>
         <img
           draggable='false'
           width={size + 'px'}
@@ -74,8 +96,12 @@ const Avatar = forwardRef<HTMLButtonElement, AvatarProps>(
           src={
             picture ||
             `https://ui-avatars.com/api/?name=${name}&background=${
-              backgroundColor || 'fff'
-            }&color=${color || '000'}&size=${+size}`
+              backgroundColor !== 'random'
+                ? cBackgroundColor.hex().substr(1)
+                : 'random'
+            }&color=${
+              backgroundColor !== 'random' ? cColor.hex().substr(1) : ''
+            }&size=${+size}`
           }
           alt={name}
           onError={(ev) => {
