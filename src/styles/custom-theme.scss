@@ -1,0 +1,23 @@
+:root {
+  // Custom Colors
+  --custom-example: #000;
+}
+
+:root,
+:root[light-theme] {
+  --custom-example: #000;
+}
+
+@mixin dark-theme {
+  --custom-example: #fff;
+}
+
+:root[dark-theme] {
+  @include dark-theme;
+}
+
+@media (prefers-scheme: dark) {
+  :root:not([dark-theme]) {
+    @include dark-theme;
+  }
+}

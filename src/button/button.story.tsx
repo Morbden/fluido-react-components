@@ -1,5 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import Button, { ButtonProps } from './index'
+import '../styles/material.scss'
+import '../styles/elevation.scss'
 
 const ComponentMeta: Meta = {
   title: 'Button',

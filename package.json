@@ -1,6 +1,6 @@
 {
   "name": "@fluido/react-components",
-  "version": "0.2.2",
+  "version": "0.2.4",
   "description": "Fluido webapp components",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -23,7 +23,7 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@fluido/react-effects": "^0.1.4",
+    "@fluido/react-effects": "^0.1.5",
     "@fluido/react-utils": "^0.1.3",
     "@hookstate/core": "^3.0.6",
     "@popperjs/core": "^2.9.0",
@@ -49,16 +49,20 @@
     "@storybook/addon-actions": "^6.1.21",
     "@storybook/addon-essentials": "^6.1.21",
     "@storybook/addon-links": "^6.1.21",
+    "@storybook/preset-scss": "^1.0.3",
     "@storybook/react": "^6.1.21",
     "@types/classnames": "^2.2.11",
     "@types/color": "^3.0.1",
-    "@types/node": "^14.14.31",
-    "@types/react": "^17.0.2",
+    "@types/node": "^14.14.32",
+    "@types/react": "^17.0.3",
     "@types/react-portal": "^4.0.2",
     "@types/styled-components": "^5.1.7",
+    "css-loader": "^5.1.1",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "sass": "^1.32.8",
+    "sass-loader": "^10.1.1",
+    "style-loader": "^2.0.0",
     "styled-components": "^5.2.1",
     "typescript": "^4.2.3"
   }

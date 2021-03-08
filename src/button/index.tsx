@@ -37,7 +37,6 @@ const StyledNode = styled.button`
   cursor: pointer;
   text-decoration: none;
   box-sizing: border-box;
-  clip-path: inset(2px 2px 2px 2px);
 
   --disabled: var(--on-surface-disabled);
   --transition: 250ms linear;
@@ -56,17 +55,16 @@ const StyledNode = styled.button`
     --on-button: currentColor;
   }
 
-  &.text,
-  &.outline {
+  &:not(.clear-color):is(.text, .outline) {
     color: var(--button);
   }
 
   &.rounded,
-  &.rounded :is(.button-bg, .button-overlay) {
+  &.rounded > :not(.button-text) {
     border-radius: 999px;
   }
 
-  & :is(.button-bg, .button-overlay) {
+  & > :not(.button-text) {
     box-sizing: border-box;
     position: absolute;
     top: 2px;
