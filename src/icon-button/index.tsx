@@ -19,7 +19,7 @@ const StyledIconButton = styled.button`
   color: var(--icon-button-color, inherit);
   font-size: inherit;
   padding: 0.25rem;
-  border-radius: var(--icon-button-border-radius, 999999px);
+  border-radius: var(--icon-button-border-radius, 999px);
   cursor: pointer;
   position: relative;
 

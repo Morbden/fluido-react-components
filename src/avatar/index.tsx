@@ -24,7 +24,7 @@ const StyledButton = styled.button`
   border: none;
   background-color: var(--secondary);
   color: var(--on-secondary);
-  border-radius: 99999999px;
+  border-radius: 9999px;
   overflow: hidden;
   outline: none;
   cursor: pointer;

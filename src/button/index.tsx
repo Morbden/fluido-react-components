@@ -1,22 +1,22 @@
 import { useRipple } from '@fluido/react-effects'
 import cx from 'classnames'
-import { forwardRef, ReactElement } from 'react'
+import { forwardRef } from 'react'
 import styled from 'styled-components'
 
-interface ButtonProps {
+export interface ButtonProps {
   children?: any
   rounded?: boolean
   disabled?: boolean
-  marginless?: boolean
   noRipple?: boolean
+  marginless?: boolean
   className?: string
   classText?: string
   kind?: 'text' | 'outline'
   type?: 'link' | 'button' | 'submit' | 'reset'
   color?: 'clear' | 'secondary'
   elevation?: number
-  leading?: ReactElement
-  trailing?: ReactElement
+  leading?: React.ReactNode
+  trailing?: React.ReactNode
   [key: string]: any
 }
 
@@ -37,18 +37,19 @@ const StyledNode = styled.button`
   cursor: pointer;
   text-decoration: none;
   box-sizing: border-box;
+  clip-path: inset(2px 2px 2px 2px);
 
   --disabled: var(--on-surface-disabled);
   --transition: 250ms linear;
   transition: color var(--transition);
 
   &.primary-color {
-    --button: var(--primary);
-    --on-button: var(--on-primary-high-emphasis);
+    --button: var(--primary, #4285f4);
+    --on-button: var(--on-primary-high-emphasis, #fff);
   }
   &.secondary-color {
-    --button: var(--secondary);
-    --on-button: var(--on-secondary);
+    --button: var(--secondary, #aa66cc);
+    --on-button: var(--on-secondary, #fff);
   }
   &.clear-color {
     --button: transparent;
@@ -60,9 +61,12 @@ const StyledNode = styled.button`
     color: var(--button);
   }
 
-  & .button-ripple-area,
-  & .button-bg,
-  & .button-overlay {
+  &.rounded,
+  &.rounded :is(.button-bg, .button-overlay) {
+    border-radius: 999px;
+  }
+
+  & :is(.button-bg, .button-overlay) {
     box-sizing: border-box;
     position: absolute;
     top: 2px;
@@ -74,22 +78,25 @@ const StyledNode = styled.button`
     background-color: transparent;
   }
 
-  &.marginless .button-ripple-area,
-  &.marginless .button-bg,
-  &.marginless .button-overlay {
-    top: 0;
-    right: 0;
-    bottom: 0;
-    left: 0;
+  &.marginless {
+    clip-path: unset;
+    & :is(.button-bg, .button-overlay) {
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+    }
   }
 
-  &:not(.outline):not(.text) .button-bg {
-    background-color: var(--button);
+  &:not(.outline):not(.text) {
+    & .button-bg {
+      background-color: var(--button);
+    }
+    &:is([data-disabled='true'], :disabled) .button-bg {
+      opacity: 0.24;
+    }
   }
-  &:not(.outline):not(.text)[data-disabled='true'] .button-bg,
-  &:not(.outline):not(.text):disabled .button-bg {
-    opacity: 0.24;
-  }
+
   &.outline .button-bg {
     border: 2px solid currentColor;
   }
@@ -100,14 +107,11 @@ const StyledNode = styled.button`
     transition: opacity 0.15s;
   }
 
-  &:hover:not([data-disabled='true']) .button-overlay,
-  &:hover:not(:disabled) .button-overlay {
+  &:hover:not(:is([data-disabled='true'], :disabled)) .button-overlay {
     opacity: 0.12;
   }
-  &.no-ripple:focus:not([data-disabled='true']) .button-overlay,
-  &.no-ripple:active:not([data-disabled='true']) .button-overlay,
-  &.no-ripple:focus:not(:disabled) .button-overlay,
-  &.no-ripple:active:not(:disabled) .button-overlay {
+  &.no-ripple:is(:focus, :active):not(:is([data-disabled='true'], :disabled))
+    .button-overlay {
     opacity: 0.24;
   }
 
@@ -166,7 +170,9 @@ const Button = forwardRef<HTMLButtonElement | HTMLLinkElement, ButtonProps>(
     },
     fRef,
   ) => {
-    const { anchor } = useRipple()
+    const { anchor } = useRipple({
+      disabled: noRipple,
+    })
 
     const handleRef = (node: HTMLButtonElement) => {
       if (fRef) {

@@ -12,7 +12,6 @@ const Template: Story<AvatarProps> = (args) => <Avatar {...args} />
 export const onlyName = Template.bind({})
 onlyName.args = {
   name: 'Renato Rodrigues',
-  backgroundColor: '',
   size: 128,
 }
 
@@ -30,4 +29,9 @@ allProps.args = {
   color: '',
   picture: '',
   size: 128,
+}
+allProps.argTypes = {
+  color: {
+    control: 'color',
+  },
 }
