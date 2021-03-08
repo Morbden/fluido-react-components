@@ -2,6 +2,9 @@ import { Meta, Story } from '@storybook/react'
 import styled from 'styled-components'
 import Badge from './index'
 
+import '../styles/material.scss'
+import '../styles/typography.scss'
+
 interface ObjectFree {
   [key: string]: any
 }

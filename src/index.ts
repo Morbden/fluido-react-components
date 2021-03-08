@@ -1,7 +1,6 @@
 import Avatar from './avatar'
 import Badge from './badge'
 import Button from './button'
-import * as commons from './commons'
 import Dialog from './dialog'
 import Form from './form'
 import IconButton from './icon-button'
@@ -16,7 +15,6 @@ export {
   Avatar,
   Badge,
   Button,
-  commons,
   Dialog,
   Form,
   IconButton,

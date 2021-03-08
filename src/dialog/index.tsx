@@ -10,12 +10,12 @@ import { useMediaQuery } from '@fluido/react-utils'
 import IconButton from '../icon-button'
 import DialogActions from './dialog-actions'
 
-interface DialogProps {
+export interface DialogProps {
   title?: string
-  open?: State<boolean>
+  open?: boolean
   lock?: boolean
   breakpoint?: number
-  isSSR?: number
+  browser?: boolean
   actions?: {
     [key: string]: VoidFunction
   }
@@ -104,6 +104,7 @@ const StyledDialog = styled.div`
     flex-wrap: nowrap;
     align-items: center;
     height: 3rem;
+    border-bottom: 1px solid var(--on-surface-divider, rgba(0, 0, 0, 0.38));
   }
 
   .dialog > header h1 {
@@ -115,7 +116,7 @@ const StyledDialog = styled.div`
   }
   .dialog > div {
     flex: 1 0 auto;
-    padding: 1rem 1rem 0;
+    padding: 1rem 1rem 1rem;
   }
 
   .dialog > footer {
@@ -123,6 +124,10 @@ const StyledDialog = styled.div`
     flex-direction: row-reverse;
     align-items: center;
     padding: 0.5rem;
+    border-top: 1px solid var(--on-surface-divider, rgba(0, 0, 0, 0.38));
+    &:empty {
+      display: none;
+    }
   }
 `
 
@@ -132,7 +137,7 @@ const Dialog: React.FunctionComponent<DialogProps> = ({
   title,
   lock,
   open,
-  isSSR = false,
+  browser = false,
   breakpoint = 560,
   onClose,
   onSubmit,
@@ -140,7 +145,6 @@ const Dialog: React.FunctionComponent<DialogProps> = ({
   const sm = useMediaQuery(`(min-width: ${breakpoint}px)`)
 
   const handleClose = () => {
-    open.set(false)
     if (onClose) onClose(false)
   }
 
@@ -152,21 +156,18 @@ const Dialog: React.FunctionComponent<DialogProps> = ({
   }
 
   useEffect(() => {
-    if (!isSSR) {
-      if (
-        open.value &&
-        !document.body.classList.contains('modal-opened-block')
-      ) {
+    if (browser) {
+      if (open && !document.body.classList.contains('modal-opened-block')) {
         document.body.classList.add('modal-opened-block')
       } else if (
-        !open.value &&
+        !open &&
         document.body.classList.contains('modal-opened-block')
       ) {
         document.body.classList.remove('modal-opened-block')
       }
 
       const escapePress = (ev: KeyboardEvent) => {
-        if (open.value && !lock && ev.key === 'Escape' && onClose) {
+        if (open && !lock && ev.key === 'Escape' && onClose) {
           onClose(false)
         }
       }
@@ -176,13 +177,13 @@ const Dialog: React.FunctionComponent<DialogProps> = ({
         document.removeEventListener('keydown', escapePress, true)
       }
     }
-  }, [isSSR, open.value])
+  }, [browser, open])
 
   return (
     <Portal>
       <StyledDialog
         className={cx({
-          open: open.value,
+          open: open,
         })}
         data-scrim='true'
         onMouseDown={handleScrimClick}>
@@ -191,11 +192,11 @@ const Dialog: React.FunctionComponent<DialogProps> = ({
           aria-labelledby='dialog-title'
           variants={dialogVariants}
           initial='close'
-          animate={open.value ? 'open' : 'close'}
+          animate={open ? 'open' : 'close'}
           onSubmit={onSubmit}
           className={cx('dialog', { sm })}>
           <header>
-            <h1 id='dialog-title' className='type-h4'>
+            <h1 id='dialog-title' className='type-h5'>
               {title}
             </h1>
             {!lock && (

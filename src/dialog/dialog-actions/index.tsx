@@ -17,6 +17,7 @@ const DialogActions: React.FunctionComponent<DialogActionsProps> = ({
     <>
       {entries.map((entry) => (
         <Button
+          kind='text'
           onClick={() => {
             if (entry[1]) entry[1]()
             if (onClose) onClose()
