@@ -2,7 +2,7 @@ import cx from 'classnames'
 import { motion } from 'framer-motion'
 import styled from 'styled-components'
 
-interface SurfaceProps {
+export interface SurfaceProps {
   className?: string
   elevation?: number
   [key: string]: any

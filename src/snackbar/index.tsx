@@ -4,23 +4,21 @@ import { useEffect } from 'react'
 import styled from 'styled-components'
 import Button from '../button'
 
-export interface SnackbarStateProps {
+interface SnackbarCommonProps {
   action?: VoidFunction
   actionLabel?: string
-  duration?: number
   icon?: React.ReactNode
   message?: string
   type?: 'default' | 'error' | 'warning' | 'success'
 }
 
-export interface SnackbarProps {
-  action?: VoidFunction
-  actionLabel?: string
-  icon?: React.ReactNode
-  message?: string
+export interface SnackbarStateProps extends SnackbarCommonProps {
+  duration?: number
+}
+
+export interface SnackbarProps extends SnackbarCommonProps {
   onClose?: VoidFunction
   snack?: State<SnackbarStateProps>
-  type?: 'default' | 'error' | 'warning' | 'success'
 }
 
 const StyledSnackbar = styled.div`
@@ -131,12 +129,11 @@ const Snackbar: React.FunctionComponent<SnackbarProps> = ({
       }>
       {tIcon && <div className='icon'>{tIcon}</div>}
       <div className='type-body'>{tMessage}</div>
-      {tAction && (
+      {tActionLabel && (
         <div className='action'>
           <Button
             color='clear'
             onClick={() => {
-              alert('asd')
               if (onClose) onClose()
               if (tAction) tAction()
             }}>

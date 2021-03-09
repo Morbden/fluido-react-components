@@ -85,6 +85,10 @@
 
   --error: var(--light-error, #b00020);
   --on-error: var(--light-on-error, #fff);
+  --warning: var(--light-warning, #ffd600);
+  --on-warning: var(--light-on-warning, #000);
+  --success: var(--light-success, #55dd00);
+  --on-success: var(--light-on-success, #000);
 
   --transparent: var(--light-transparent, rgba(255, 255, 255, 0));
 
@@ -119,6 +123,10 @@
 
   --error: var(--dark-error);
   --on-error: var(--dark-on-error);
+  --warning: var(--dark-warning);
+  --on-warning: var(--dark-on-warning);
+  --success: var(--dark-success);
+  --on-success: var(--dark-on-success);
 
   --transparent: var(--dark-transparent);
 
