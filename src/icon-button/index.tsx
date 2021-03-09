@@ -3,7 +3,7 @@ import { forwardRef } from 'react'
 import styled from 'styled-components'
 import Badge from '../badge'
 
-interface IconButtonProps {
+export interface IconButtonProps {
   children?: any
   type?: 'button' | 'submit' | 'reset'
   badge?: boolean | number | string
@@ -29,49 +29,8 @@ const StyledIconButton = styled.button`
     pointer-events: none;
   }
 
-  & .button::after {
-    content: '';
-    display: none;
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-    width: 100%;
-    border-radius: inherit;
-    background-color: currentColor;
-    transition: transform 100ms var(--easing-standard, ease-in-out),
-      opacity 100ms var(--easing-standard, ease-in-out);
-    will-change: transform;
-  }
-
-  &:not(:disabled):hover .button::after {
-    display: block;
-    opacity: 0.04;
-  }
-
   &:focus {
     outline: none;
-  }
-
-  &:not(:disabled):focus .button::after {
-    display: block;
-    opacity: 0.12;
-    animation: grow 100ms var(--easing-standard, ease-in-out);
-  }
-
-  &:not(:disabled):active .button::after {
-    display: block;
-    opacity: 0.12;
-    transform: scale(0.9);
-  }
-
-  @keyframes grow {
-    from {
-      transform: scale(0.0001);
-    }
-    to {
-      transform: scale(1);
-    }
   }
 
   .button {
@@ -84,6 +43,47 @@ const StyledIconButton = styled.button`
     outline: none;
     position: relative;
     text-decoration: none;
+  }
+
+  .button::after {
+    content: '';
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    border-radius: inherit;
+    background-color: currentColor;
+    opacity: 0;
+    transition: transform 100ms var(--easing-standard, ease-in-out),
+      opacity 100ms var(--easing-standard, ease-in-out);
+    will-change: transform;
+  }
+
+  &:not(:disabled) {
+    &:hover .button::after {
+      opacity: 0.04;
+    }
+
+    &:focus .button::after {
+      opacity: 0.12;
+      animation: grow 100ms var(--easing-standard, ease-in-out);
+    }
+
+    &:active .button::after {
+      opacity: 0.12;
+      transform: scale(0.9);
+    }
+  }
+
+  @keyframes grow {
+    from {
+      transform: scale(0.0001);
+    }
+    to {
+      transform: scale(1);
+    }
   }
 
   .button-content {

@@ -1,6 +1,6 @@
 import styled from 'styled-components'
 
-interface ProgressBarProps {
+export interface ProgressBarProps {
   max?: number
   value?: number
   buffer?: number
@@ -75,6 +75,9 @@ const ProgressBar: React.FunctionComponent<ProgressBarProps> = ({
 
   newValue *= 100
   buffer *= 100
+
+  if (newValue > 100) newValue = 100
+  if (buffer > 100) buffer = 100
 
   return (
     <StyledProgressBar
