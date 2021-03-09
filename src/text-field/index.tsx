@@ -3,14 +3,14 @@ import { forwardRef, useEffect, useState } from 'react'
 import { testIsSSR } from '../utils'
 import styled from 'styled-components'
 
-interface TextFieldProps {
+export interface TextFieldProps {
   name: string
   label?: string
   placeholder?: string
   type?: string
   trailing?: React.ReactNode
   leading?: React.ReactNode
-  maskConfig?: string | { [key: string]: any }
+  maskConfig?: string | string[] | Inputmask.Options
   error?: string
   disabled?: boolean
   required?: boolean
@@ -26,6 +26,7 @@ const StyledTextField = styled.label`
   &[data-disabled='true'] {
     cursor: default;
     color: var(--on-surface-disabled);
+    pointer-events: none;
   }
 
   &[data-disabled='true'] input {
@@ -37,7 +38,7 @@ const StyledTextField = styled.label`
     margin-left: 1rem;
   }
 
-  & input {
+  input {
     background-color: var(--surface);
     color: var(--on-surface-high-emphasis);
     padding: 0.5rem 1rem;
@@ -47,10 +48,31 @@ const StyledTextField = styled.label`
     outline: none;
   }
 
+  &.with-leading input {
+    padding-left: 2.75rem;
+  }
+  &.with-trailing input {
+    padding-right: 2.75rem;
+  }
+
+  .trailing,
+  .leading {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  .leading {
+    left: 0.75rem;
+  }
+  .trailing {
+    right: 0.75rem;
+  }
+
   .wrapper {
     display: flex;
     flex-direction: column;
     align-items: stretch;
+    position: relative;
   }
 
   .input-error {
@@ -95,9 +117,16 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         ref.focus()
       }
       if (!isSSR && ref && maskConfig) {
-        const Mask = require('inputmask').default
-        let iMask = new Mask(maskConfig)
-        iMask.mask(ref)
+        let iMask: Inputmask.Instance
+        import('inputmask').then((Inputmask) => {
+          const Mask = Inputmask.default
+          if (typeof maskConfig === 'string') {
+            iMask = new Mask(maskConfig)
+          } else {
+            iMask = new Mask(maskConfig as Inputmask.Options)
+          }
+          iMask.mask(ref)
+        })
 
         return () => {
           iMask.remove()
@@ -119,7 +148,13 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         )}
         <div className='wrapper'>
           {!!leading && <span className='leading'>{leading}</span>}
-          <input ref={handleRef} name={name} type={type} {...props} />
+          <input
+            ref={handleRef}
+            placeholder={placeholder}
+            name={name}
+            type={type}
+            {...props}
+          />
           {!!trailing && <span className='trailing'>{trailing}</span>}
         </div>
         <span className='input-error type-caption'>{error || ''}</span>

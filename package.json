@@ -1,6 +1,6 @@
 {
   "name": "@fluido/react-components",
-  "version": "0.3.2",
+  "version": "0.3.5",
   "description": "Fluido webapp components",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -56,6 +56,7 @@
     "@storybook/react": "^6.1.21",
     "@types/classnames": "^2.2.11",
     "@types/color": "^3.0.1",
+    "@types/inputmask": "^5.0.0",
     "@types/node": "^14.14.32",
     "@types/react": "^17.0.3",
     "@types/react-portal": "^4.0.2",
