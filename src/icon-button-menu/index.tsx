@@ -1,9 +1,9 @@
 import { useState } from 'react'
 import IconButton from '../icon-button'
-import PopMenu from '../pop-menu'
+import PopMenu, { PopMenuProps } from '../pop-menu'
 
-interface IconButtonMenuProps {
-  menu?: any
+export interface IconButtonMenuProps {
+  menu?: PopMenuProps
   [key: string]: any
 }
 

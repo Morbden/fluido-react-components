@@ -189,7 +189,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLLinkElement, ButtonProps>(
       <StyledNode
         as={type === 'link' ? 'a' : 'button'}
         ref={handleRef}
-        className={cx('tap-area', className, {
+        className={cx('tap-area', 'type-button', className, {
           outline: kind === 'outline',
           text: kind === 'text',
           rounded: rounded,
@@ -209,7 +209,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLLinkElement, ButtonProps>(
         <div className='button-pixelate'></div>
         <div className='button-text'>
           {leading && <span className='button-leading'>{leading}</span>}
-          <span className={cx('type-button', classText)}>{children}</span>
+          <span className={classText}>{children}</span>
           {trailing && <span className='button-trailing'>{trailing}</span>}
         </div>
       </StyledNode>

@@ -5,30 +5,30 @@ import { AnimatePresence, motion } from 'framer-motion'
 import { IconType } from 'react-icons'
 import styled from 'styled-components'
 import Button from '../button'
+import { testIsSSR } from '../utils'
 
 export interface MenuProps {
-  id: string
+  id: string | number
   label: string
   icon?: IconType | React.ReactNode | React.ReactElement | any
-  divider?: string
+  divider?: boolean
 }
 
-interface PopMenuProps {
-  anchor: (Element | VirtualElement) & HTMLElement
-  list: MenuProps[]
-  isSSR?: boolean
-  onClick: (id: string) => void
+export interface PopMenuProps {
+  anchor?: (Element | VirtualElement) & HTMLElement
+  list?: MenuProps[]
+  onClick?: (id: string | number) => void
 }
 
 const StyledPopMenu = styled.div`
   width: 14rem;
 
-  & menu {
+  menu {
     margin: 0;
     padding: 0;
   }
 
-  & menu > ul {
+  ul {
     background-color: var(--surface);
     color: var(--on-surface-high-emphasis);
     border: 2px solid var(--on-surface-divider);
@@ -38,19 +38,19 @@ const StyledPopMenu = styled.div`
     min-width: 8rem;
   }
 
-  & menu > ul .button {
-    text-transform: none;
+  ul .button {
+    text-transform: unset;
     width: 100%;
     padding-left: 0.5rem;
   }
-  & menu > ul .button :global(*) {
-    text-transform: none;
+  .button-text {
+    text-transform: unset;
     justify-content: flex-start;
     text-align: left;
   }
 
-  & menu > ul hr {
-    --size: 2px;
+  ul hr {
+    margin: 0.25rem 0;
   }
 `
 
@@ -91,13 +91,13 @@ const liVariants = {
 }
 
 const PopMenu: React.FunctionComponent<PopMenuProps> = ({
-  isSSR = false,
   anchor,
   list = [],
   onClick,
 }) => {
   const [menu, setMenu] = useState<HTMLDivElement>(null)
   const [open, setOpen] = useState<boolean>(false)
+  const isSSR = testIsSSR()
 
   const popperObj = usePopper(anchor, menu, {
     placement: 'bottom-end',

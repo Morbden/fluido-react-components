@@ -1,5 +1,6 @@
 import cx from 'classnames'
 import { forwardRef, useEffect, useState } from 'react'
+import { testIsSSR } from '../utils'
 import styled from 'styled-components'
 
 interface TextFieldProps {
@@ -10,7 +11,6 @@ interface TextFieldProps {
   trailing?: React.ReactNode
   leading?: React.ReactNode
   maskConfig?: string | { [key: string]: any }
-  isSSR?: boolean
   error?: string
   disabled?: boolean
   required?: boolean
@@ -72,12 +72,12 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       disabled,
       required,
       maskConfig,
-      isSSR = false,
       ...props
     },
     fRef,
   ) => {
     const [ref, setRef] = useState<HTMLInputElement>(null)
+    const isSSR = testIsSSR()
 
     const handleRef = (node: HTMLInputElement) => {
       if (fRef) {

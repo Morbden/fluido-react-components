@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
+import { testIsSSR } from '../utils'
 import { CSSProperties } from 'styled-components'
 import { ScrollableWrapper, ScrollButton } from './scrollable-list-styled'
 import {
@@ -36,11 +37,6 @@ export interface ScrollableListProps {
   snapType?: 'mandatory' | 'proximity'
   /** Aceita qualquer propriedade CSS ou variáveis específicas do [[ CustomCSSProps ]] */
   style?: CSSProperties & CustomCSSProps
-  /**
-   * Informa ao sistema se está rodando em SSR ou não
-   * Por padrão é `false`
-   */
-  isSSR?: boolean
 }
 
 const ScrollableList: React.FC<ScrollableListProps> = ({
@@ -51,7 +47,6 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   snap = 'start',
   snapType = 'proximity',
   style,
-  isSSR = false,
 }) => {
   const ListType = ordered ? 'ol' : 'ul'
   const [hasPointer, setHasPointer] = useState<boolean>(true)
@@ -60,6 +55,7 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   const [scrollNode, setScrollNode] = useState<
     HTMLUListElement | HTMLOListElement
   >(null)
+  const isSSR = testIsSSR()
 
   useEffect(() => {
     if (!isSSR && !('scrollBehavior' in document.documentElement.style)) {
