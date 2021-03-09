@@ -4,7 +4,7 @@ import { useEffect } from 'react'
 import styled from 'styled-components'
 import Button from '../button'
 
-export interface SnackbarBaseProps {
+export interface SnackbarStateProps {
   action?: VoidFunction
   actionLabel?: string
   duration?: number
@@ -13,13 +13,13 @@ export interface SnackbarBaseProps {
   type?: 'default' | 'error' | 'warning' | 'success'
 }
 
-interface SnackbarProps {
+export interface SnackbarProps {
   action?: VoidFunction
   actionLabel?: string
   icon?: React.ReactNode
   message?: string
   onClose?: VoidFunction
-  snack?: State<SnackbarBaseProps>
+  snack?: State<SnackbarStateProps>
   type?: 'default' | 'error' | 'warning' | 'success'
 }
 
