@@ -30,7 +30,13 @@ interface GetChildrenPositionsType {
 
 export const parseHtmlCollectionToArray: ParseHtmlCollectionToArrayType = (
   el,
-) => [...el]
+) => {
+  const result: Element[] = []
+  for (let i = 0; i < el.length; i++) {
+    result.push(el[i])
+  }
+  return result
+}
 
 export const getOffsetLeft: GetOffsetLeftType = (el) => el.offsetLeft
 
