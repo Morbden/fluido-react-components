@@ -140,7 +140,7 @@
   @include dark-theme;
 }
 
-@media (prefers-scheme: dark) {
+@media (prefers-color-scheme: dark) {
   :root:not([light-theme]) {
     @include dark-theme;
   }
