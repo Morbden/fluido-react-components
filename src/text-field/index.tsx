@@ -120,16 +120,12 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         let iMask: Inputmask.Instance
         import('inputmask').then((Inputmask) => {
           const Mask = Inputmask.default
-          if (typeof maskConfig === 'string') {
-            iMask = new Mask(maskConfig)
-          } else {
-            iMask = new Mask(maskConfig as Inputmask.Options)
-          }
+          iMask = new Mask(maskConfig as any)
           iMask.mask(ref)
         })
 
         return () => {
-          iMask.remove()
+          if (iMask) iMask.remove()
         }
       }
     }, [isSSR, ref, maskConfig])
