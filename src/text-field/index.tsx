@@ -29,11 +29,6 @@ const StyledTextField = styled.label`
     pointer-events: none;
   }
 
-  &[data-disabled='true'] input {
-    background-color: var(--surface);
-    color: var(--on-surface-disabled);
-  }
-
   & > span {
     margin-left: 1rem;
   }
@@ -46,6 +41,9 @@ const StyledTextField = styled.label`
     height: 3rem;
     border: 1px solid var(--on-surface-divider);
     outline: none;
+  }
+  input:disabled {
+    color: var(--on-surface-disabled);
   }
 
   &.with-leading input {
@@ -143,15 +141,16 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
           </span>
         )}
         <div className='wrapper'>
-          {!!leading && <span className='leading'>{leading}</span>}
+          {!!leading && <div className='leading'>{leading}</div>}
           <input
             ref={handleRef}
             placeholder={placeholder}
+            disabled={disabled}
             name={name}
             type={type}
             {...props}
           />
-          {!!trailing && <span className='trailing'>{trailing}</span>}
+          {!!trailing && <div className='trailing'>{trailing}</div>}
         </div>
         <span className='input-error type-caption'>{error || ''}</span>
       </StyledTextField>

@@ -1,6 +1,6 @@
 {
   "name": "@fluido/react-components",
-  "version": "0.3.10",
+  "version": "0.3.11",
   "description": "Fluido webapp components",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -67,7 +67,7 @@
     "react": "^17.0.1",
     "react-dom": "^17.0.1",
     "sass": "^1.32.8",
-    "sass-loader": "^11.0.1",
+    "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0",
     "styled-components": "^5.2.1",
     "typescript": "^4.2.3"

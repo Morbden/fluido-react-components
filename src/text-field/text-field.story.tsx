@@ -21,11 +21,13 @@ export const withMask = Template.bind({})
 withMask.args = {
   label: 'CPF/CNPJ',
   maskConfig: ['999.999.999-99', '99.999.999/9999-99'],
+  disabled: false,
 }
 export const allProps = Template.bind({})
 allProps.args = {
   label: 'A Label',
   placeholder: 'A Placeholder',
+  disabled: false,
   error: '',
   leading: true,
   trailing: true,
