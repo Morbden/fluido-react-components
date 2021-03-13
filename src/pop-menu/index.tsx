@@ -22,6 +22,7 @@ export interface PopMenuProps {
 
 const StyledPopMenu = styled.div`
   width: 14rem;
+  z-index: 300;
 
   menu {
     margin: 0;
