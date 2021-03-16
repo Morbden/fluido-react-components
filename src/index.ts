@@ -11,6 +11,7 @@ import Snackbar from './snackbar'
 import Surface from './surface'
 import TextField from './text-field'
 import useInViewScrollPosition from './use-in-view-scroll-position'
+import useInViewScrollInterpolation from './use-in-view-scroll-interpolation'
 
 export {
   Avatar,
@@ -26,4 +27,5 @@ export {
   Surface,
   TextField,
   useInViewScrollPosition,
+  useInViewScrollInterpolation,
 }
