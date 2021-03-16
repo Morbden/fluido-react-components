@@ -1,6 +1,9 @@
 import { Meta, Story } from '@storybook/react'
+import { motion } from 'framer-motion'
 import styled from 'styled-components'
-import useInViewScrollPosition, { UseInViewScrollPositionProps } from './index'
+import useInViewScrollInterpolation, {
+  UseInViewScrollInterpolationProps,
+} from './index'
 
 interface ThresholdProps {
   percentage: number
@@ -11,7 +14,7 @@ interface RootMarginProps {
 }
 
 const ComponentMeta: Meta = {
-  title: 'UseInViewScrollPosition',
+  title: 'UseInViewScrollInterpolation',
   parameters: { layout: 'fullscreen' },
 }
 
@@ -28,14 +31,25 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   background-color: lightsteelblue;
-  > div {
+  .box {
     position: relative;
-    width: 400px;
-    height: 200px;
+    width: 25rem;
+    height: 25rem;
     background-color: steelblue;
     box-sizing: border-box;
     padding: 1rem;
     font-size: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    & > .item {
+      position: fixed;
+      top: calc(50% - 2rem);
+      left: calc(50% - 2rem);
+      width: 4rem;
+      height: 4rem;
+      background: linear-gradient(to bottom, purple, green);
+    }
   }
 `
 const ThresholdTop = styled.div<ThresholdProps>`
@@ -76,8 +90,13 @@ const RootMarginBottom = styled.div<RootMarginProps>`
   right: -50%;
   border-bottom: 2px dotted var(--dots-color);
 `
-const Template: Story<UseInViewScrollPositionProps> = (args) => {
-  const { ref, ...extra } = useInViewScrollPosition(args)
+const Template: Story<UseInViewScrollInterpolationProps> = (args) => {
+  const { ref, result } = useInViewScrollInterpolation({
+    ...args,
+    interpolations: {
+      rotate: [0, 360],
+    },
+  })
 
   return (
     <Container>
@@ -86,7 +105,7 @@ const Template: Story<UseInViewScrollPositionProps> = (args) => {
         <ThresholdBottom percentage={args.thresholdBottom * 100} />
         <RootMarginTop percentage={args.rootMarginTop} />
         <RootMarginBottom percentage={args.rootMarginBottom} />
-        <pre>{JSON.stringify(extra, null, 2)}</pre>
+        <motion.div style={result} className='item' />
       </div>
     </Container>
   )
@@ -94,10 +113,9 @@ const Template: Story<UseInViewScrollPositionProps> = (args) => {
 
 export const FirstState = Template.bind({})
 FirstState.args = {
-  behaviorStart: 'entering',
-  behaviorEnd: 'gone',
-  thresholdTop: 0.3,
-  thresholdBottom: 0.3,
+  orientation: 'vertical',
+  thresholdTop: 0,
+  thresholdBottom: 0,
   rootMarginTop: 0,
   rootMarginBottom: 0,
 }
@@ -112,7 +130,7 @@ FirstState.argTypes = {
   behaviorEnd: {
     control: {
       type: 'select',
-      options: ['gone', 'leaving'],
+      options: ['leaving', 'gone'],
     },
   },
   thresholdTop: {
