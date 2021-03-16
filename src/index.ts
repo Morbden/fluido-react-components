@@ -10,6 +10,7 @@ import ScrollableList from './scrollable-list'
 import Snackbar from './snackbar'
 import Surface from './surface'
 import TextField from './text-field'
+import useInViewScrollPosition from './use-in-view-scroll-position'
 
 export {
   Avatar,
@@ -24,4 +25,5 @@ export {
   Snackbar,
   Surface,
   TextField,
+  useInViewScrollPosition,
 }
