@@ -1,5 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import Button, { ButtonProps } from './index'
+import { MdAccountCircle, MdClose } from 'react-icons/md'
 import '../styles/material.scss'
 import '../styles/typography.scss'
 import '../styles/elevation.scss'
@@ -10,7 +11,16 @@ const ComponentMeta: Meta = {
 
 export default ComponentMeta
 
-const Template: Story<ButtonProps> = (args) => <Button {...args} />
+const Template: Story<ButtonProps> = (args) => {
+  const { leading, trailing, ...props } = args
+  return (
+    <Button
+      leading={leading && <MdAccountCircle size='24' />}
+      trailing={trailing && <MdClose size='24' />}
+      {...props}
+    />
+  )
+}
 
 export const clearButton = Template.bind({})
 clearButton.args = {
@@ -56,8 +66,8 @@ allProps.args = {
   marginless: false,
   noRipple: false,
   elevation: 2,
-  leading: 'LEAD',
-  trailing: 'TRAIL',
+  leading: true,
+  trailing: true,
 } as ButtonProps
 
 allProps.argTypes = {
