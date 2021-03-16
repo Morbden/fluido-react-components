@@ -64,13 +64,17 @@ const useInViewScrollPosition: UseInViewScrollPositionType = (args = {}) => {
       const posXEnd = posX + refRect.width
 
       const scrollTop = window.pageYOffset || document.documentElement.scrollTop
+      const screenHeight =
+        window.innerHeight || document.documentElement.offsetHeight
       const scrollLeft =
         window.pageXOffset || document.documentElement.scrollLeft
+      const screenWidth =
+        window.innerWidth || document.documentElement.offsetWidth
 
-      let calcStartY = posY + scrollTop
-      let calcEndY = posYEnd + scrollTop
-      let calcStartX = posX + scrollLeft
-      let calcEndX = posXEnd + scrollLeft
+      let calcStartY = posY + scrollTop - screenHeight
+      let calcEndY = posYEnd + scrollTop - screenHeight
+      let calcStartX = posX + scrollLeft - screenWidth
+      let calcEndX = posXEnd + scrollLeft - screenWidth
 
       const checkIfNumber = (input) => !isNaN(+input)
 
