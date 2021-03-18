@@ -90,9 +90,27 @@ const RootMarginBottom = styled.div<RootMarginProps>`
   right: -50%;
   border-bottom: 2px dotted var(--dots-color);
 `
-const Template: Story<UseInViewScrollInterpolationProps> = (args) => {
+
+interface ExtraProps {
+  stiffness: number
+  damping: number
+  mass: number
+}
+
+const Template: Story<UseInViewScrollInterpolationProps & ExtraProps> = (
+  args,
+) => {
+  const { stiffness, damping, mass, ...props } = args
+
   const { ref, result } = useInViewScrollInterpolation({
-    ...args,
+    ...props,
+    ease: {
+      rotate: {
+        stiffness,
+        damping,
+        mass,
+      },
+    },
     interpolations: {
       rotate: [0, 360],
     },
@@ -101,10 +119,10 @@ const Template: Story<UseInViewScrollInterpolationProps> = (args) => {
   return (
     <Container>
       <div className='box' ref={ref}>
-        <ThresholdTop percentage={args.thresholdTop * 100} />
-        <ThresholdBottom percentage={args.thresholdBottom * 100} />
-        <RootMarginTop percentage={args.rootMarginTop} />
-        <RootMarginBottom percentage={args.rootMarginBottom} />
+        {/* <ThresholdTop percentage={args.thresholdOffsetStart * 100} />
+        <ThresholdBottom percentage={args.thresholdOffsetEnd * 100} />
+        <RootMarginTop percentage={args.rootMarginOffsetStart} />
+        <RootMarginBottom percentage={args.rootMarginOffsetEnd} /> */}
         <motion.div style={result} className='item' />
       </div>
     </Container>
@@ -113,27 +131,32 @@ const Template: Story<UseInViewScrollInterpolationProps> = (args) => {
 
 export const FirstState = Template.bind({})
 FirstState.args = {
-  orientation: 'vertical',
-  thresholdTop: 0,
-  thresholdBottom: 0,
-  rootMarginTop: 0,
-  rootMarginBottom: 0,
+  debug: true,
+  behaviorStart: 'entering',
+  behaviorEnd: 'gone',
+  thresholdOffsetStart: 0,
+  thresholdOffsetEnd: 0,
+  rootMarginOffsetStart: 0,
+  rootMarginOffsetEnd: 0,
+  damping: 20,
+  mass: 1,
+  stiffness: 100,
 }
 
 FirstState.argTypes = {
   behaviorStart: {
     control: {
-      type: 'select',
+      type: 'radio',
       options: ['entering', 'visible'],
     },
   },
   behaviorEnd: {
     control: {
-      type: 'select',
+      type: 'radio',
       options: ['leaving', 'gone'],
     },
   },
-  thresholdTop: {
+  thresholdOffsetStart: {
     control: {
       type: 'range',
       max: 1,
@@ -141,7 +164,7 @@ FirstState.argTypes = {
       step: 0.05,
     },
   },
-  thresholdBottom: {
+  thresholdOffsetEnd: {
     control: {
       type: 'range',
       max: 1,

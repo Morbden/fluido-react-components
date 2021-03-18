@@ -1,4 +1,11 @@
-import { MotionValue, useTransform, useViewportScroll } from 'framer-motion'
+import {
+  MotionValue,
+  useReducedMotion,
+  useSpring,
+  useTransform,
+  useViewportScroll,
+} from 'framer-motion'
+import { SpringOptions } from 'popmotion'
 import useInViewScrollPosition, {
   UseInViewScrollPositionProps,
 } from '../use-in-view-scroll-position'
@@ -18,6 +25,9 @@ export interface InterpolationResult<T = any> {
 
 export interface UseInViewScrollInterpolationProps<T = any>
   extends UseInViewScrollPositionProps {
+  ease?: {
+    [key: string]: SpringOptions
+  }
   interpolations?: InterpolationProps<T>
   interpolationSteps?: InterpolationStepProps
 }
@@ -39,6 +49,7 @@ const useInViewScrollInterpolation: UseInViewScrollInterpolationType = (
   const { interpolations, interpolationSteps, ...props } = args
 
   const { scrollY: scroll } = useViewportScroll()
+  const reduced = useReducedMotion()
   const { ref, start, end } = useInViewScrollPosition(props)
 
   const result: InterpolationResult = {}
@@ -60,7 +71,18 @@ const useInViewScrollInterpolation: UseInViewScrollInterpolationType = (
     }
     const finalSteps = genSteps()
 
-    result[r] = useTransform(scroll, finalSteps, interpolations[r])
+    const interpolationsComputed = reduced
+      ? interpolations[r].fill(0)
+      : interpolations[r]
+
+    const t = useTransform(scroll, finalSteps, interpolationsComputed)
+    const ease: SpringOptions = (args.ease && args.ease[r]) || {
+      damping: 20,
+      mass: 1,
+      stiffness: 100,
+    }
+
+    result[r] = useSpring(t, ease)
   }
 
   return { ref, result }

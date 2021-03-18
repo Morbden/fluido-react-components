@@ -82,10 +82,10 @@ const Template: Story<UseInViewScrollPositionProps> = (args) => {
   return (
     <Container>
       <div className='box' ref={ref}>
-        <ThresholdTop percentage={args.thresholdTop * 100} />
-        <ThresholdBottom percentage={args.thresholdBottom * 100} />
-        <RootMarginTop percentage={args.rootMarginTop} />
-        <RootMarginBottom percentage={args.rootMarginBottom} />
+        {/* <ThresholdTop percentage={args.thresholdOffsetStart * 100} />
+        <ThresholdBottom percentage={args.thresholdOffsetEnd * 100} />
+        <RootMarginTop percentage={args.rootMarginOffsetStart} />
+        <RootMarginBottom percentage={args.rootMarginOffsetEnd} /> */}
         <pre>{JSON.stringify(extra, null, 2)}</pre>
       </div>
     </Container>
@@ -94,12 +94,13 @@ const Template: Story<UseInViewScrollPositionProps> = (args) => {
 
 export const FirstState = Template.bind({})
 FirstState.args = {
+  debug: true,
   behaviorStart: 'entering',
   behaviorEnd: 'gone',
-  thresholdTop: 0.3,
-  thresholdBottom: 0.3,
-  rootMarginTop: 0,
-  rootMarginBottom: 0,
+  thresholdOffsetStart: 0.3,
+  thresholdOffsetEnd: 0.3,
+  rootMarginOffsetStart: 0,
+  rootMarginOffsetEnd: 0,
 }
 
 FirstState.argTypes = {
@@ -115,7 +116,7 @@ FirstState.argTypes = {
       options: ['gone', 'leaving'],
     },
   },
-  thresholdTop: {
+  thresholdOffsetStart: {
     control: {
       type: 'range',
       max: 1,
@@ -123,7 +124,7 @@ FirstState.argTypes = {
       step: 0.05,
     },
   },
-  thresholdBottom: {
+  thresholdOffsetEnd: {
     control: {
       type: 'range',
       max: 1,
