@@ -16,8 +16,8 @@ export default ComponentMeta
 
 const Container = styled.div`
   position: relative;
-  width: 4rem;
-  height: 4rem;
+  width: 3rem;
+  height: 3rem;
   border-radius: 999px;
   background-color: rebeccapurple;
 `

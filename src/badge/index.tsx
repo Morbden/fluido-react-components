@@ -6,8 +6,9 @@ const StyledDiv = styled.div`
   position: absolute;
   top: 0;
   right: 0;
+  transform: translate(33%, -33%);
   display: flex;
-  padding-bottom: 1px;
+  padding: 1px 5px 0;
   align-items: center;
   justify-content: center;
   height: 1.25rem;

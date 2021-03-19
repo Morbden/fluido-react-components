@@ -9,19 +9,30 @@ export interface IconButtonProps {
   badge?: boolean | number | string
   className?: string
   disabled?: boolean
+  size?: number | number
   [key: string]: any
 }
 
-const StyledIconButton = styled.button`
+interface StyledIconButtonProps {
+  size?: number | number
+}
+
+const StyledIconButton = styled.button<StyledIconButtonProps>`
+  --icon-button-size: ${(p) =>
+    (p.size && ((!isNaN(+p.size) && p.size + 'px') || p.size)) || ''};
   appearance: none;
   background-color: transparent;
+  width: var(--icon-button-size, 2.5rem);
+  height: var(--icon-button-size, 2.5rem);
   border: 0;
+  padding: 0;
+  margin: 0;
   color: var(--icon-button-color, inherit);
   font-size: inherit;
-  padding: 0.25rem;
   border-radius: var(--icon-button-border-radius, 999px);
   cursor: pointer;
   position: relative;
+  z-index: 0;
 
   &:disabled {
     color: var(--on-surface-disabled);
@@ -34,15 +45,15 @@ const StyledIconButton = styled.button`
   }
 
   .button {
+    width: 100%;
+    height: 100%;
     color: inherit;
-    width: 2.5rem;
-    height: 2.5rem;
-    padding: 0.5rem;
     border: none;
     border-radius: inherit;
-    outline: none;
-    position: relative;
     text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
 
   .button::after {
@@ -59,6 +70,7 @@ const StyledIconButton = styled.button`
     transition: transform 100ms var(--easing-standard, ease-in-out),
       opacity 100ms var(--easing-standard, ease-in-out);
     will-change: transform;
+    z-index: -1;
   }
 
   &:not(:disabled) {
@@ -85,15 +97,19 @@ const StyledIconButton = styled.button`
       transform: scale(1);
     }
   }
-
-  .button-content {
-    position: relative;
-  }
 `
 
 const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
   (
-    { children, className, badge = '', type = 'button', disabled, ...props },
+    {
+      children,
+      className,
+      badge = '',
+      type = 'button',
+      disabled,
+      size,
+      ...props
+    },
     ref,
   ) => {
     return (
@@ -101,13 +117,12 @@ const IconButton = forwardRef<HTMLButtonElement, IconButtonProps>(
       // O tamanho visual do botão é definido no componente filho.
       <StyledIconButton
         ref={ref}
+        size={size}
         type={type as 'button' | 'submit' | 'reset'}
         className={cx('type-button', className)}
         disabled={disabled}
         {...props}>
-        <div className={'button'}>
-          <div className={'button-content'}>{children}</div>
-        </div>
+        <div className={'button'}>{children}</div>
 
         {/* Badges são opcionais que servem para indicar notificações direto no ícone. */}
         {!!badge && <Badge>{badge}</Badge>}
