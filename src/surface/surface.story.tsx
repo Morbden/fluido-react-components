@@ -26,9 +26,18 @@ const Template: Story<SurfaceProps> = (args) => (
 
 export const allProps = Template.bind({})
 allProps.args = {
-  elevation: 2,
+  elevation: 1,
+  radius: 8,
 }
 allProps.argTypes = {
+  radius: {
+    control: {
+      type: 'range',
+      max: 64,
+      min: 0,
+      step: 1,
+    },
+  },
   elevation: {
     control: {
       type: 'range',

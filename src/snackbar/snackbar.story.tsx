@@ -13,7 +13,9 @@ interface ExtraProps {
 }
 
 const Template: Story<SnackbarProps & ExtraProps> = ({ withIcon, ...args }) => (
-  <Snackbar icon={withIcon && <MdInfo size='24' />} {...args} />
+  <div style={{ width: '20rem' }}>
+    <Snackbar icon={withIcon && <MdInfo size='24' />} {...args} />
+  </div>
 )
 
 export const allProps = Template.bind({})

@@ -62,7 +62,7 @@ allProps.args = {
   children: 'Button',
   kind: 'fill',
   elevation: 2,
-  round: 0,
+  radius: 0,
   ripple: true,
   marginless: false,
   disabled: false,
@@ -79,7 +79,7 @@ allProps.argTypes = {
       step: 1,
     },
   },
-  round: {
+  radius: {
     control: {
       type: 'range',
       min: 0,

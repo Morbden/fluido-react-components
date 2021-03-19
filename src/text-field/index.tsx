@@ -38,7 +38,7 @@ const StyledTextField = styled.label`
     color: var(--on-surface-high-emphasis);
     padding: 0.5rem 1rem;
     margin: 0.5rem 0;
-    height: 3rem;
+    height: 2.5rem;
     border: 1px solid var(--on-surface-divider);
     outline: none;
   }
@@ -47,23 +47,23 @@ const StyledTextField = styled.label`
   }
 
   &.with-leading input {
-    padding-left: 2.75rem;
+    padding-left: 2.5rem;
   }
   &.with-trailing input {
-    padding-right: 2.75rem;
+    padding-right: 2.5rem;
   }
 
   .trailing,
   .leading {
     position: absolute;
-    top: 50%;
+    top: calc(50% + 2px);
     transform: translateY(-50%);
   }
   .leading {
-    left: 0.75rem;
+    left: 0.5rem;
   }
   .trailing {
-    right: 0.75rem;
+    right: 0.5rem;
   }
 
   .wrapper {

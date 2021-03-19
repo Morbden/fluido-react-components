@@ -5,7 +5,7 @@ import styled from 'styled-components'
 
 export interface ButtonProps {
   children?: any
-  round?: number
+  radius?: number | string
   disabled?: boolean
   ripple?: boolean
   marginless?: boolean
@@ -21,7 +21,7 @@ export interface ButtonProps {
 }
 
 interface StyledNodeProps {
-  round: number
+  radius?: number | string
 }
 
 const StyledNode = styled.button<StyledNodeProps>`
@@ -33,7 +33,8 @@ const StyledNode = styled.button<StyledNodeProps>`
   min-width: 4rem;
   margin: 0;
   padding: 0;
-  border-radius: ${(p) => p.round}px;
+  border-radius: ${(p) =>
+    (p.radius && ((!isNaN(+p.radius) && p.radius + 'px') || p.radius)) || 0};
   border: none;
   outline: none;
   color: var(--on-button);
@@ -65,7 +66,8 @@ const StyledNode = styled.button<StyledNodeProps>`
   }
 
   & > :not(.button-text) {
-    border-radius: ${(p) => p.round}px;
+    border-radius: ${(p) =>
+      (p.radius && ((!isNaN(+p.radius) && p.radius + 'px') || p.radius)) || 0};
   }
 
   & > :not(.button-text) {
@@ -169,7 +171,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLLinkElement, ButtonProps>(
       kind = 'fill',
       color,
       ripple = false,
-      round = 0,
+      radius = 0,
       marginless = false,
       elevation = 0,
       ...props
@@ -197,7 +199,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLLinkElement, ButtonProps>(
       <StyledNode
         as={type === 'link' ? 'a' : 'button'}
         ref={handleRef}
-        round={round}
+        radius={radius}
         className={cx('tap-area', 'type-button', className, {
           outline: kind === 'outline',
           text: kind === 'text',

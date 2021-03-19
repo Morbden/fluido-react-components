@@ -5,25 +5,32 @@ import styled from 'styled-components'
 export interface SurfaceProps {
   className?: string
   elevation?: number
+  radius?: number | string
   [key: string]: any
 }
 
-const StyledSurface = styled(motion.div)`
+interface StyledSurfaceProps {
+  radius?: number | string
+}
+
+const StyledSurface = styled(motion.div)<StyledSurfaceProps>`
   position: relative;
   background-color: var(--surface);
   color: var(--on-surface-high-emphasis);
-  border-radius: 0.5rem;
-  border: 1px solid var(--on-surface-divider);
+  border-radius: ${(p) =>
+    (p.radius && ((!isNaN(+p.radius) && p.radius + 'px') || p.radius)) || 0};
 `
 
 const Surface: React.FunctionComponent<SurfaceProps> = ({
   children,
   className,
-  elevation = 0,
+  elevation = 1,
+  radius = 0,
   ...props
 }) => {
   return (
     <StyledSurface
+      radius={radius}
       className={cx(className, `elevation-${elevation}`)}
       {...props}>
       {children}

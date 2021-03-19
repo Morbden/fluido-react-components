@@ -26,9 +26,8 @@ const StyledSnackbar = styled.div`
   background-color: var(--on-surface-high-emphasis);
   color: var(--surface);
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   padding: 0 0.5rem 4px;
-  height: 3rem;
   box-shadow: 0px 5px 6px -3px var(--elevation-umbra),
     0px 9px 12px 1px var(--elevation-penumbra),
     0px 3px 16px 2px var(--elevation-ambient);
@@ -53,9 +52,23 @@ const StyledSnackbar = styled.div`
   }
 
   .icon {
-    margin-right: 0.5rem;
+    margin-right: 0.75rem 0.5rem;
+    padding: 0.5rem 0.25rem 0;
+  }
+  .content {
+    flex: 1 1 100%;
+    display: flex;
+    flex-wrap: wrap;
+
+    & > p {
+      flex: 1 1 fit-content;
+      padding: 0.75rem 0.5rem;
+    }
   }
   .action {
+    display: flex;
+    flex-direction: row-reverse;
+    align-items: center;
     margin-left: auto;
   }
 
@@ -128,19 +141,21 @@ const Snackbar: React.FunctionComponent<SnackbarProps> = ({
         } as { [key: string]: any } & React.CSSProperties
       }>
       {tIcon && <div className='icon'>{tIcon}</div>}
-      <div className='type-body'>{tMessage}</div>
-      {tActionLabel && (
-        <div className='action'>
-          <Button
-            color='clear'
-            onClick={() => {
-              if (onClose) onClose()
-              if (tAction) tAction()
-            }}>
-            {tActionLabel}
-          </Button>
-        </div>
-      )}
+      <div className='content'>
+        <p>{tMessage}</p>
+        {tActionLabel && (
+          <div className='action'>
+            <Button
+              color='clear'
+              onClick={() => {
+                if (onClose) onClose()
+                if (tAction) tAction()
+              }}>
+              {tActionLabel}
+            </Button>
+          </div>
+        )}
+      </div>
       <div className='snack-timer' />
     </StyledSnackbar>
   )
