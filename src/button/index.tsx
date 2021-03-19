@@ -5,13 +5,13 @@ import styled from 'styled-components'
 
 export interface ButtonProps {
   children?: any
-  rounded?: boolean
+  round?: number
   disabled?: boolean
-  noRipple?: boolean
+  ripple?: boolean
   marginless?: boolean
   className?: string
   classText?: string
-  kind?: 'text' | 'outline'
+  kind?: 'fill' | 'text' | 'outline'
   type?: 'link' | 'button' | 'submit' | 'reset'
   color?: 'clear' | 'secondary'
   elevation?: number
@@ -20,7 +20,11 @@ export interface ButtonProps {
   [key: string]: any
 }
 
-const StyledNode = styled.button`
+interface StyledNodeProps {
+  round: number
+}
+
+const StyledNode = styled.button<StyledNodeProps>`
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -29,6 +33,7 @@ const StyledNode = styled.button`
   min-width: 4rem;
   margin: 0;
   padding: 0;
+  border-radius: ${(p) => p.round}px;
   border: none;
   outline: none;
   color: var(--on-button);
@@ -59,9 +64,8 @@ const StyledNode = styled.button`
     color: var(--button);
   }
 
-  &.rounded,
-  &.rounded > :not(.button-text) {
-    border-radius: 999px;
+  & > :not(.button-text) {
+    border-radius: ${(p) => p.round}px;
   }
 
   & > :not(.button-text) {
@@ -121,6 +125,10 @@ const StyledNode = styled.button`
     align-items: center;
     padding: 0 1rem;
     width: 100%;
+
+    & > .text {
+      flex: 1 0 auto;
+    }
   }
   &.text .button-text {
     padding: 0 0.5rem;
@@ -158,18 +166,18 @@ const Button = forwardRef<HTMLButtonElement | HTMLLinkElement, ButtonProps>(
       leading,
       trailing,
       type = 'button',
-      kind = '',
+      kind = 'fill',
       color,
-      noRipple = false,
-      rounded = false,
+      ripple = false,
+      round = 0,
       marginless = false,
       elevation = 0,
       ...props
-    },
-    fRef,
+    }: ButtonProps,
+    fRef: any,
   ) => {
     const { anchor } = useRipple({
-      disabled: noRipple,
+      disabled: !ripple,
     })
 
     const handleRef = (node: HTMLButtonElement) => {
@@ -180,7 +188,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLLinkElement, ButtonProps>(
           fRef.current = node
         }
       }
-      if (!noRipple && anchor) {
+      if (ripple && anchor) {
         anchor.current = node
       }
     }
@@ -189,12 +197,12 @@ const Button = forwardRef<HTMLButtonElement | HTMLLinkElement, ButtonProps>(
       <StyledNode
         as={type === 'link' ? 'a' : 'button'}
         ref={handleRef}
+        round={round}
         className={cx('tap-area', 'type-button', className, {
           outline: kind === 'outline',
           text: kind === 'text',
-          rounded: rounded,
           marginless: marginless,
-          'no-ripple': noRipple,
+          'no-ripple': !ripple,
           'primary-color': !color,
           'secondary-color': color === 'secondary',
           'clear-color': color === 'clear',
@@ -204,12 +212,17 @@ const Button = forwardRef<HTMLButtonElement | HTMLLinkElement, ButtonProps>(
         data-disabled={props.disabled || false}
         disabled={props.disabled || false}
         {...props}>
-        <div className={cx('button-bg', `elevation-${elevation}`)} />
+        <div
+          className={cx(
+            'button-bg',
+            kind !== 'text' && `elevation-${elevation}`,
+          )}
+        />
         <div className='button-overlay'></div>
         <div className='button-pixelate'></div>
         <div className='button-text'>
           {leading && <span className='button-leading'>{leading}</span>}
-          <span className={classText}>{children}</span>
+          <span className={cx('text', classText)}>{children}</span>
           {trailing && <span className='button-trailing'>{trailing}</span>}
         </div>
       </StyledNode>

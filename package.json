@@ -26,8 +26,8 @@
     "build-storybook": "build-storybook"
   },
   "dependencies": {
-    "@fluido/react-effects": "^0.1.7",
-    "@fluido/react-utils": "^0.1.5",
+    "@fluido/react-effects": "^0.1.9",
+    "@fluido/react-utils": "^0.2.2",
     "@hookstate/core": "^3.0.6",
     "@popperjs/core": "^2.9.1",
     "classnames": "^2.2.6",

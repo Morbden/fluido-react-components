@@ -5,11 +5,23 @@ import Color from 'color'
 
 export interface AvatarProps {
   picture?: string
+  /** @default 'initials' */
+  render?:
+    | 'male'
+    | 'female'
+    | 'human'
+    | 'identicon'
+    | 'initials'
+    | 'bottts'
+    | 'avataaars'
+    | 'jdenticon'
+    | 'gridy'
   name?: string
   size?: number
-  color?: string
   backgroundColor?: string
   className?: string
+  /** Configurações extras no [site da api](https://avatars.dicebear.com/styles) */
+  config?: NodeJS.Dict<string>
   [key: string]: any
 }
 
@@ -27,7 +39,7 @@ const StyledButton = styled.button`
   border-radius: 9999px;
   overflow: hidden;
   outline: none;
-  cursor: pointer;
+  cursor: default;
 
   & img {
     display: block;
@@ -40,31 +52,22 @@ const Avatar = forwardRef<HTMLButtonElement, AvatarProps>(
     {
       picture,
       name = '',
+      render = 'initials',
       size = 48,
       className,
-      color = '',
-      backgroundColor = 'random',
+      backgroundColor,
+      config = {},
       ...props
     },
     fRef,
   ) => {
     let cBackgroundColor: Color
-    let cColor: Color
 
     try {
       cBackgroundColor = Color(backgroundColor)
     } catch (err) {
       cBackgroundColor = Color('transparent')
     }
-    try {
-      cColor = Color(color)
-    } catch (err) {
-      cColor = Color('#222')
-    }
-
-    const { anchor } = useRipple({
-      toCenter: true,
-    })
 
     const handleRef = (node: HTMLButtonElement) => {
       if (fRef) {
@@ -74,9 +77,6 @@ const Avatar = forwardRef<HTMLButtonElement, AvatarProps>(
           fRef.current = node
         }
       }
-      if (anchor) {
-        anchor.current = node
-      }
     }
 
     return (
@@ -85,7 +85,9 @@ const Avatar = forwardRef<HTMLButtonElement, AvatarProps>(
         style={{
           backgroundColor: cBackgroundColor.rgb().string(),
           color:
-            backgroundColor !== 'random' ? cColor.rgb().string() : 'inherit',
+            (backgroundColor &&
+              (cBackgroundColor.isLight() ? 'black' : 'white')) ||
+            'inherit',
         }}
         className={className}
         {...props}>
@@ -95,18 +97,21 @@ const Avatar = forwardRef<HTMLButtonElement, AvatarProps>(
           height={size + 'px'}
           src={
             picture ||
-            `https://ui-avatars.com/api/?name=${name}&background=${
-              backgroundColor !== 'random'
-                ? cBackgroundColor.hex().substr(1)
-                : 'random'
-            }&color=${
-              backgroundColor !== 'random' ? cColor.hex().substr(1) : ''
-            }&size=${+size}`
+            `https://avatars.dicebear.com/api/${render}/${encodeURI(
+              name,
+            )}.svg?${
+              backgroundColor
+                ? 'b=%23' + cBackgroundColor.hex().substr(1) + '&'
+                : ''
+            }w=${+size}&h=${+size}&${Object.entries(config)
+              .map((e) => e.join('='))
+              .join('&')}`
           }
           alt={name}
           onError={(ev) => {
             const el = ev.target as HTMLImageElement
-            el.src = '/images/fallback-avatar.jpg'
+            if (!el.src.includes('/images/fallback-avatar.jpg'))
+              el.src = '/images/fallback-avatar.jpg'
           }}
         />
       </StyledButton>

@@ -1,5 +1,7 @@
-@for $i from 0 to 24 {
+@for $i from 0 to 25 {
   .elevation-#{$i} {
+    position: relative;
+    z-index: 0;
     transition: box-shadow 250ms linear, opacity 250ms linear;
   }
 }
@@ -135,7 +137,7 @@
 // Elevation overlay
 
 @mixin dark-theme {
-  @for $i from 0 to 24 {
+  @for $i from 0 to 25 {
     & .elevation-#{$i}::after {
       content: '';
       position: absolute;
@@ -144,15 +146,9 @@
       width: 100%;
       height: 100%;
       background: var(--elevation, #fff);
-      border-radius: 0.5rem;
+      border-radius: inherit;
       opacity: 0;
-      z-index: 1;
-    }
-
-    // Z-index Overlay Fix
-    & .elevation-#{$i} > * {
-      position: relative;
-      z-index: 2;
+      z-index: -1;
     }
   }
 

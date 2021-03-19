@@ -52,7 +52,7 @@ typedButton.argTypes = {
   kind: {
     control: {
       type: 'select',
-      options: ['', 'text', 'outline'],
+      options: ['fill', 'text', 'outline'],
     },
   },
 }
@@ -60,17 +60,33 @@ typedButton.argTypes = {
 export const allProps = Template.bind({})
 allProps.args = {
   children: 'Button',
-  kind: 'outline',
-  rounded: false,
-  disabled: false,
-  marginless: false,
-  noRipple: false,
+  kind: 'fill',
   elevation: 2,
+  round: 0,
+  ripple: true,
+  marginless: false,
+  disabled: false,
   leading: true,
   trailing: true,
 } as ButtonProps
 
 allProps.argTypes = {
+  elevation: {
+    control: {
+      type: 'range',
+      min: 0,
+      max: 24,
+      step: 1,
+    },
+  },
+  round: {
+    control: {
+      type: 'range',
+      min: 0,
+      max: 32,
+      step: 1,
+    },
+  },
   color: {
     control: {
       type: 'select',
@@ -80,7 +96,7 @@ allProps.argTypes = {
   kind: {
     control: {
       type: 'select',
-      options: ['', 'text', 'outline'],
+      options: ['fill', 'text', 'outline'],
     },
   },
 }

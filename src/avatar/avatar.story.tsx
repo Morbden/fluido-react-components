@@ -25,13 +25,29 @@ withPicture.args = {
 export const allProps = Template.bind({})
 allProps.args = {
   name: 'Renato Rodrigues',
-  backgroundColor: 'random',
-  color: '',
   picture: '',
+  backgroundColor: '',
   size: 128,
+  render: 'initials',
 }
 allProps.argTypes = {
-  color: {
+  backgroundColor: {
     control: 'color',
+  },
+  render: {
+    control: {
+      type: 'select',
+      options: [
+        'male',
+        'female',
+        'human',
+        'identicon',
+        'initials',
+        'bottts',
+        'avataaars',
+        'jdenticon',
+        'gridy',
+      ],
+    },
   },
 }
