@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
-import { testIsSSR } from '../utils'
 import { CSSProperties } from 'styled-components'
-import { ScrollableWrapper, ScrollButton } from './scrollable-list-styled'
+import { testIsSSR } from '../utils'
+import { ScrollableWrapper, ScrollButton } from './styled'
 import {
+  animatedScrollTo,
   getChildrenPositions,
-  getChildrenWidths,
   getNearestNumber,
 } from './utils'
 
@@ -25,18 +25,38 @@ interface CustomCSSProps {
 }
 
 export interface ScrollableListProps {
-  /** _Default_ `false` */
+  /** @default false */
   ordered?: boolean
-  /** _Default_ `false` */
+  /** @default false */
   pagination?: boolean
-  /** _Default_ `1` */
+  /** @default 1 */
   paginationStep?: 'full' | number
-  /** _Default_ `'none'` */
+  /** @default 'none' */
   snap?: 'none' | 'start' | 'center'
-  /** _Default_ `'proximity'` */
+  /** @default 'proximity' */
   snapType?: 'mandatory' | 'proximity'
   /** Aceita qualquer propriedade CSS ou variáveis específicas do [[ CustomCSSProps ]] */
   style?: CSSProperties & CustomCSSProps
+  /** @default 'easeInOutCubic' */
+  actionAnimationEase?:
+    | 'linear'
+    | 'easeIn'
+    | 'easeOut'
+    | 'easeInOut'
+    | 'easeInQuad'
+    | 'easeOutQuad'
+    | 'easeInOutQuad'
+    | 'easeInCubic'
+    | 'easeOutCubic'
+    | 'easeInOutCubic'
+    | 'easeInQuart'
+    | 'easeOutQuart'
+    | 'easeInOutQuart'
+    | 'easeInQuint'
+    | 'easeOutQuint'
+    | 'easeInOutQuint'
+  /** @default 300 */
+  actionAnimationDuration?: number
 }
 
 const ScrollableList: React.FC<ScrollableListProps> = ({
@@ -47,6 +67,8 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   snap = 'start',
   snapType = 'proximity',
   style,
+  actionAnimationEase,
+  actionAnimationDuration,
 }) => {
   const ListType = ordered ? 'ol' : 'ul'
   const [hasPointer, setHasPointer] = useState<boolean>(true)
@@ -58,16 +80,12 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   const isSSR = testIsSSR()
 
   useEffect(() => {
-    if (!isSSR && !('scrollBehavior' in document.documentElement.style)) {
-      import('scroll-behavior-polyfill')
-    }
-  }, [isSSR])
-
-  useEffect(() => {
-    window.matchMedia && window.matchMedia('(any-pointer:fine)').matches
+    !isSSR &&
+    window.matchMedia &&
+    window.matchMedia('(any-pointer:fine)').matches
       ? setHasPointer(true)
       : setHasPointer(false)
-  }, [hasPointer])
+  }, [hasPointer, isSSR])
 
   useEffect(() => {
     if (scrollNode) {
@@ -92,10 +110,22 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
         setIsLastPosition(lastPosition)
       }
 
-      scrollNode.addEventListener('scroll', handleScroll)
+      const mutation = new MutationObserver((ml) => {
+        for (const m of ml) {
+          if (m.type === 'childList') {
+            handleScroll()
+          }
+        }
+      })
 
+      scrollNode.addEventListener('scroll', handleScroll)
+      mutation.observe(scrollNode, {
+        childList: true,
+      })
+      handleScroll()
       return () => {
         scrollNode.removeEventListener('scroll', handleScroll)
+        mutation.disconnect()
       }
     }
   }, [scrollNode])
@@ -103,12 +133,19 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   const scrollForwards = () => {
     if (scrollNode && pagination) {
       if (paginationStep === 'full') {
-        scrollNode.scrollBy(scrollNode.parentElement.offsetWidth, 0)
+        animatedScrollTo(scrollNode, scrollNode.parentElement.offsetWidth, {
+          ease: actionAnimationEase,
+          duration: actionAnimationDuration,
+        })
       } else {
-        const childrenWidths = getChildrenWidths(scrollNode)
-        const widths = childrenWidths.slice(position, position + paginationStep)
-        const step = widths.reduce((prev, value) => prev + value, 0)
-        scrollNode.scrollBy(step, 0)
+        const pos = position + paginationStep
+        const validPos =
+          pos >= scrollNode.children.length
+            ? scrollNode.children.length - 1
+            : pos
+
+        const child = scrollNode.children[validPos]
+        animatedScrollTo(scrollNode, child as HTMLElement)
       }
     }
   }
@@ -116,15 +153,13 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   const scrollBackwards = () => {
     if (scrollNode && pagination) {
       if (paginationStep === 'full') {
-        scrollNode.scrollBy(-scrollNode.parentElement.offsetWidth, 0)
+        animatedScrollTo(scrollNode, -scrollNode.parentElement.offsetWidth)
       } else {
-        const childrenWidths = getChildrenWidths(scrollNode)
-        let initialPosition = position - paginationStep
-        initialPosition = initialPosition < 0 ? 0 : initialPosition
-        const widths = childrenWidths.slice(initialPosition, position)
-        const step = widths.reduce((prev, value) => prev + value, 0)
+        const pos = position - paginationStep
+        const validPos = pos < 0 ? 0 : pos
 
-        scrollNode.scrollBy(-step, 0)
+        const child = scrollNode.children[validPos]
+        animatedScrollTo(scrollNode, child as HTMLElement)
       }
     }
   }

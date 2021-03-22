@@ -17,6 +17,7 @@ export const ScrollableWrapper = styled.div<ScrollableListProps>`
   --padding-top: var(--padding);
   --padding-bottom: var(--padding);
   position: relative;
+  z-index: 0;
   display: flex;
   align-items: center;
   ul,
@@ -25,9 +26,10 @@ export const ScrollableWrapper = styled.div<ScrollableListProps>`
     grid-auto-flow: column;
     grid-auto-columns: max-content;
     gap: var(--gap);
-    scroll-behavior: smooth;
+    /* scroll-behavior: smooth;
     scroll-snap-type: x ${(props) => props.snapType};
-    scroll-padding-left: ${(props) => props.snap === 'start' && 'var(--start)'};
+    scroll-padding-left: ${(props) =>
+      props.snap === 'start' && 'var(--start)'}; */
     list-style: none;
     overflow-x: auto;
     overflow-y: visible;
