@@ -26,10 +26,9 @@ export const ScrollableWrapper = styled.div<ScrollableListProps>`
     grid-auto-flow: column;
     grid-auto-columns: max-content;
     gap: var(--gap);
-    /* scroll-behavior: smooth;
+    scroll-behavior: smooth;
     scroll-snap-type: x ${(props) => props.snapType};
-    scroll-padding-left: ${(props) =>
-      props.snap === 'start' && 'var(--start)'}; */
+    scroll-padding-left: ${(props) => props.snap === 'start' && 'var(--start)'};
     list-style: none;
     overflow-x: auto;
     overflow-y: visible;
