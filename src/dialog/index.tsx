@@ -19,6 +19,7 @@ export interface DialogProps {
   actions?: {
     [key: string]: VoidFunction
   }
+  footer?: React.ReactNode
   onClose?: (close: boolean) => void
   onSubmit?: SubmitHandler<Record<string, any>>
 }
@@ -134,6 +135,7 @@ const StyledDialog = styled.div`
 const Dialog: React.FunctionComponent<DialogProps> = ({
   children,
   actions,
+  footer,
   title,
   lock,
   open,
@@ -205,7 +207,11 @@ const Dialog: React.FunctionComponent<DialogProps> = ({
           </header>
           <div>{children}</div>
           <footer>
-            <DialogActions actions={actions} onClose={handleClose} />
+            {footer ? (
+              footer
+            ) : (
+              <DialogActions actions={actions} onClose={handleClose} />
+            )}
           </footer>
         </motion.form>
       </StyledDialog>
