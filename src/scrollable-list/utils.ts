@@ -143,6 +143,7 @@ export const animatedScrollTo: AnimatedScrollToType = (node, val, opt = {}) => {
   const ease = easing[opt.ease || 'easeInOutCubic']
   const start: number = +window.getComputedStyle(node).paddingInlineStart || 16
   const scrollPos: number = node.scrollLeft
+  node.setAttribute('data-scroll-animation', '')
 
   if (val instanceof HTMLElement && testPositions()) {
     distance = val.offsetLeft - scrollPos
@@ -160,6 +161,7 @@ export const animatedScrollTo: AnimatedScrollToType = (node, val, opt = {}) => {
           const to = scrollPos + distance - start
           node.scrollTo(to, 0)
           run = false
+          node.removeAttribute('data-scroll-animation')
         }
         const posTime = time / duration
         const validPos = posTime < 1 ? posTime : 1
@@ -172,5 +174,6 @@ export const animatedScrollTo: AnimatedScrollToType = (node, val, opt = {}) => {
   } else {
     const to = scrollPos + distance - start
     node.scrollTo(to, 0)
+    node.removeAttribute('data-scroll-animation')
   }
 }

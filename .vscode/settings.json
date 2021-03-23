@@ -4,7 +4,6 @@
     "**/.svn": true,
     "**/.hg": true,
     "**/.DS_Store": true,
-    "node_modules": true,
-    ".next": true
+    "node_modules": true
   }
 }

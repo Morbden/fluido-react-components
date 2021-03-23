@@ -46,6 +46,8 @@ allProps.args = {
   paginationStep: 2,
   snap: 'start',
   snapType: 'mandatory',
+  actionAnimationEase: 'easeInOutCubic',
+  actionAnimationDuration: 300,
 }
 
 allProps.argTypes = {
@@ -59,6 +61,29 @@ allProps.argTypes = {
     control: {
       type: 'select',
       options: ['mandatory', 'proximity'],
+    },
+  },
+  actionAnimationEase: {
+    control: {
+      type: 'select',
+      options: [
+        'linear',
+        'easeIn',
+        'easeOut',
+        'easeInOut',
+        'easeInQuad',
+        'easeOutQuad',
+        'easeInOutQuad',
+        'easeInCubic',
+        'easeOutCubic',
+        'easeInOutCubic',
+        'easeInQuart',
+        'easeOutQuart',
+        'easeInOutQuart',
+        'easeInQuint',
+        'easeOutQuint',
+        'easeInOutQuint',
+      ],
     },
   },
 }
