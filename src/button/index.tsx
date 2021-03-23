@@ -49,16 +49,16 @@ const StyledNode = styled.button<StyledNodeProps>`
   transition: color var(--transition);
 
   &.primary-color {
-    --button: var(--primary, #4285f4);
-    --on-button: var(--on-primary-high-emphasis, #fff);
+    --button: var(--button-custom, var(--primary, #4285f4));
+    --on-button: var(--on-button-custom, var(--on-primary-high-emphasis, #fff));
   }
   &.secondary-color {
-    --button: var(--secondary, #aa66cc);
-    --on-button: var(--on-secondary, #fff);
+    --button: var(--button-custom, var(--secondary, #aa66cc));
+    --on-button: var(--on-button-custom, var(--on-secondary, #fff));
   }
   &.clear-color {
-    --button: transparent;
-    --on-button: currentColor;
+    --button: var(--button-custom, transparent);
+    --on-button: var(--on-button-custom, currentColor);
   }
 
   &:not(.clear-color):is(.text, .outline) {
