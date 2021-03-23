@@ -37,26 +37,6 @@ export interface ScrollableListProps {
   snapType?: 'mandatory' | 'proximity'
   /** Aceita qualquer propriedade CSS ou variáveis específicas do [[ CustomCSSProps ]] */
   style?: CSSProperties & CustomCSSProps
-  /** @default 'easeInOutCubic' */
-  actionAnimationEase?:
-    | 'linear'
-    | 'easeIn'
-    | 'easeOut'
-    | 'easeInOut'
-    | 'easeInQuad'
-    | 'easeOutQuad'
-    | 'easeInOutQuad'
-    | 'easeInCubic'
-    | 'easeOutCubic'
-    | 'easeInOutCubic'
-    | 'easeInQuart'
-    | 'easeOutQuart'
-    | 'easeInOutQuart'
-    | 'easeInQuint'
-    | 'easeOutQuint'
-    | 'easeInOutQuint'
-  /** @default 300 */
-  actionAnimationDuration?: number
 }
 
 const ScrollableList: React.FC<ScrollableListProps> = ({
@@ -67,8 +47,6 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   snap = 'start',
   snapType = 'proximity',
   style,
-  actionAnimationEase,
-  actionAnimationDuration,
 }) => {
   const ListType = ordered ? 'ol' : 'ul'
   const [hasPointer, setHasPointer] = useState<boolean>(true)
@@ -89,22 +67,6 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
 
   useEffect(() => {
     if (scrollNode) {
-      let tid: any = null
-      let touch: boolean = false
-      let currentPos: number = 0
-
-      // const callScroll = (pos: number, time: number = 300) => {
-      //   if (touch) return
-      //   if (tid) {
-      //     clearTimeout(tid)
-      //     tid = null
-      //   }
-      //   tid = setTimeout(() => {
-      //     const child = scrollNode.children[pos]
-      //     animatedScrollTo(scrollNode, child as HTMLElement)
-      //   }, time)
-      // }
-
       const handleScroll = () => {
         const scrollNodePosition = scrollNode.scrollLeft
         const scrollNodeFullWidth = scrollNode.scrollWidth
@@ -122,10 +84,8 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
         const lastPosition =
           scrollNodeFullWidth - scrollNodePosition <= scrollNodeWidth + 32
 
-        // currentPos = scrollPosition
         setPosition(scrollPosition)
         setIsLastPosition(lastPosition)
-        // callScroll(scrollPosition)
       }
 
       const mutation = new MutationObserver((ml) => {
@@ -142,21 +102,8 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
       })
       handleScroll()
 
-      // const td = () => {
-      //   touch = true
-      // }
-      // const tu = () => {
-      //   touch = false
-      //   callScroll(currentPos, 100)
-      // }
-
-      // scrollNode.addEventListener('touchstart', td)
-      // scrollNode.addEventListener('touchend', tu)
-
       return () => {
         scrollNode.removeEventListener('scroll', handleScroll)
-        // scrollNode.removeEventListener('touchstart', td)
-        // scrollNode.removeEventListener('touchend', tu)
         mutation.disconnect()
       }
     }
@@ -165,10 +112,7 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   const scrollForwards = () => {
     if (scrollNode && pagination) {
       if (paginationStep === 'full') {
-        animatedScrollTo(scrollNode, scrollNode.parentElement.offsetWidth, {
-          ease: actionAnimationEase,
-          duration: actionAnimationDuration,
-        })
+        animatedScrollTo(scrollNode, scrollNode.parentElement.offsetWidth)
       } else {
         const pos = position + paginationStep
         const validPos =
