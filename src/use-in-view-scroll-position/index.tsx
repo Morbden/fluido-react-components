@@ -139,7 +139,7 @@ const useInViewScrollPosition: UseInViewScrollPositionType = (args = {}) => {
         const calcStartY = distanceFromRootTop - viewportHeight + addStartY
         const calcEndY = distanceFromRootBottom + addEndY
 
-        const checkIfNumber = (input: any) => !isNaN(+input)
+        const checkIfNumber = (input: any) => !isNaN(parseFloat(input))
 
         const thresholdStartY =
           (checkIfNumber(args.thresholdOffsetStart) &&

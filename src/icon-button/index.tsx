@@ -19,7 +19,9 @@ interface StyledIconButtonProps {
 
 const StyledIconButton = styled.button<StyledIconButtonProps>`
   --icon-button-size: ${(p) =>
-    (p.size && ((!isNaN(+p.size) && p.size + 'px') || p.size)) || ''};
+    (p.size &&
+      ((!isNaN(parseFloat(p.size as any)) && p.size + 'px') || p.size)) ||
+    ''};
   appearance: none;
   background-color: transparent;
   width: var(--icon-button-size, 2.5rem);

@@ -18,7 +18,9 @@ const StyledSurface = styled(motion.div)<StyledSurfaceProps>`
   background-color: var(--surface);
   color: var(--on-surface-high-emphasis);
   border-radius: ${(p) =>
-    (p.radius && ((!isNaN(+p.radius) && p.radius + 'px') || p.radius)) || 0};
+    (p.radius &&
+      ((!isNaN(parseFloat(p.radius as any)) && p.radius + 'px') || p.radius)) ||
+    0};
 `
 
 const Surface: React.FunctionComponent<SurfaceProps> = ({

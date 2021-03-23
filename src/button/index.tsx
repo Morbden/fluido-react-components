@@ -34,7 +34,9 @@ const StyledNode = styled.button<StyledNodeProps>`
   margin: 0;
   padding: 0;
   border-radius: ${(p) =>
-    (p.radius && ((!isNaN(+p.radius) && p.radius + 'px') || p.radius)) || 0};
+    (p.radius &&
+      ((!isNaN(parseFloat(p.radius as any)) && p.radius + 'px') || p.radius)) ||
+    0};
   border: none;
   outline: none;
   color: var(--on-button);
@@ -67,7 +69,10 @@ const StyledNode = styled.button<StyledNodeProps>`
 
   & > :not(.button-text) {
     border-radius: ${(p) =>
-      (p.radius && ((!isNaN(+p.radius) && p.radius + 'px') || p.radius)) || 0};
+      (p.radius &&
+        ((!isNaN(parseFloat(p.radius as any)) && p.radius + 'px') ||
+          p.radius)) ||
+      0};
   }
 
   & > :not(.button-text) {

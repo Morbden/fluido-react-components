@@ -90,7 +90,7 @@ export const animatedScrollTo: AnimatedScrollToType = (node, val) => {
     distance = val.offsetLeft - scrollPos
   } else {
   }
-  if (!isNaN(+val) && testPositions()) {
+  if (!isNaN(parseFloat(val as any)) && testPositions()) {
     distance = (val as number) || 0
   }
 

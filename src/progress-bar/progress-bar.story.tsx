@@ -14,6 +14,7 @@ allProps.args = {
   value: 20,
   max: 100,
   buffer: 60,
+  indeterminate: false,
 }
 allProps.argTypes = {
   value: {
