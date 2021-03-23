@@ -79,13 +79,13 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   >(null)
   const isSSR = testIsSSR()
 
-  // useEffect(() => {
-  //   !isSSR &&
-  //   window.matchMedia &&
-  //   window.matchMedia('(any-pointer:fine)').matches
-  //     ? setHasPointer(true)
-  //     : setHasPointer(false)
-  // }, [hasPointer, isSSR])
+  useEffect(() => {
+    !isSSR &&
+    window.matchMedia &&
+    window.matchMedia('(any-pointer:fine)').matches
+      ? setHasPointer(true)
+      : setHasPointer(false)
+  }, [hasPointer, isSSR])
 
   useEffect(() => {
     if (scrollNode) {
