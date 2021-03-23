@@ -14,7 +14,7 @@ export interface DialogProps {
   title?: string
   open?: boolean
   lock?: boolean
-  breakpoint?: number
+  fullscreen?: boolean
   browser?: boolean
   actions?: {
     [key: string]: VoidFunction
@@ -138,12 +138,10 @@ const Dialog: React.FunctionComponent<DialogProps> = ({
   lock,
   open,
   browser = false,
-  breakpoint = 560,
+  fullscreen = false,
   onClose,
   onSubmit,
 }) => {
-  const sm = useMediaQuery(`(min-width: ${breakpoint}px)`)
-
   const handleClose = () => {
     if (onClose) onClose(false)
   }
@@ -194,7 +192,7 @@ const Dialog: React.FunctionComponent<DialogProps> = ({
           initial='close'
           animate={open ? 'open' : 'close'}
           onSubmit={onSubmit}
-          className={cx('dialog', { sm })}>
+          className={cx('dialog', { sm: !fullscreen })}>
           <header>
             <h1 id='dialog-title' className='type-h5'>
               {title}
