@@ -32,7 +32,7 @@ const Template: Story<ScrollableListProps & ExtraProps> = ({
     {Array(childSize)
       .fill(0)
       .map((_, i) => (
-        <li>
+        <li key={i}>
           <Box>{i + 1}</Box>
         </li>
       ))}

@@ -37,7 +37,7 @@ export const ScrollableWrapper = styled.div<ScrollableListProps>`
     margin-block-end: unset;
     white-space: nowrap;
     width: 100%;
-    &:not([data-scroll-animation]) {
+    &:not([data-scroll-id]) {
       scroll-behavior: smooth;
       scroll-snap-type: x ${(props) => props.snapType};
       scroll-padding-left: ${(props) =>

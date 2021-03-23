@@ -1,5 +1,6 @@
 import { testIsSSR } from '../utils'
 import * as easing from './easing'
+import { uid } from 'uid'
 
 /** Pegar o nó e transformar em Array */
 interface ParseHtmlCollectionToArrayType {
@@ -120,16 +121,16 @@ const validadeBrowser = () => {
 
 export const startAnimation: StartAnimationType = (anime, validate) => {
   if (!validadeBrowser()) return null
-  let startTime = 0
+  // let startTime = 0
 
-  const timer = (t: number) => {
-    if (!startTime) {
-      startTime = t
-    }
-    return t - startTime
-  }
+  // const timer = (t: number) => {
+  //   if (!startTime) {
+  //     startTime = t
+  //   }
+  //   return t - startTime
+  // }
   const a = (t: number) => {
-    anime(timer(t))
+    anime(t)
     if (validate()) window.requestAnimationFrame(a)
   }
   a(0)
@@ -143,7 +144,6 @@ export const animatedScrollTo: AnimatedScrollToType = (node, val, opt = {}) => {
   const ease = easing[opt.ease || 'easeInOutCubic']
   const start: number = +window.getComputedStyle(node).paddingInlineStart || 16
   const scrollPos: number = node.scrollLeft
-  node.setAttribute('data-scroll-animation', '')
 
   if (val instanceof HTMLElement && testPositions()) {
     distance = val.offsetLeft - scrollPos
@@ -153,27 +153,51 @@ export const animatedScrollTo: AnimatedScrollToType = (node, val, opt = {}) => {
     distance = (val as number) || 0
   }
 
+  const clearNode = () => {
+    node.removeAttribute('data-scroll-start')
+    node.removeAttribute('data-scroll-scrollPos')
+    node.removeAttribute('data-scroll-distance')
+    node.removeAttribute('data-scroll-timer')
+    node.removeAttribute('data-scroll-id')
+  }
+
+  node.setAttribute('data-scroll-start', start)
+  node.setAttribute('data-scroll-scrollPos', scrollPos)
+  node.setAttribute('data-scroll-distance', distance)
+  node.setAttribute('data-scroll-timer', '')
+  const id = uid(4)
+  node.setAttribute('data-scroll-id', id)
+
   if (validadeBrowser()) {
-    let run = true
     startAnimation(
-      (time) => {
-        if (time >= duration) {
-          const to = scrollPos + distance - start
+      (now) => {
+        let startTime = +node.getAttribute('data-scroll-timer')
+        if (!startTime) {
+          node.setAttribute('data-scroll-timer', now)
+          startTime = now
+        }
+
+        const time = now - startTime
+        const spos = +node.getAttribute('data-scroll-scrollPos')
+        const s = +node.getAttribute('data-scroll-start')
+        const d = +node.getAttribute('data-scroll-distance')
+
+        if (time >= duration || d - s === 0) {
+          const to = spos + d - s
           node.scrollTo(to, 0)
-          run = false
-          node.removeAttribute('data-scroll-animation')
+          clearNode()
         }
         const posTime = time / duration
         const validPos = posTime < 1 ? posTime : 1
         const easeTime = ease(validPos)
-        const to = (distance - start) * easeTime + scrollPos
+        const to = (d - s) * easeTime + spos
         node.scrollTo(to, 0)
       },
-      () => run,
+      () => node.getAttribute('data-scroll-id') === id,
     )
   } else {
     const to = scrollPos + distance - start
     node.scrollTo(to, 0)
-    node.removeAttribute('data-scroll-animation')
+    clearNode()
   }
 }
