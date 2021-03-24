@@ -25,6 +25,16 @@ interface GetChildrenWidthsType {
   (node: HTMLElement): number[]
 }
 
+/** Pegar as distancias dos filhos do nó */
+interface GetChildrenRangeType {
+  (node: HTMLElement): [number, number][]
+}
+
+/** Pegar as quais dos filhos do estão visiveis */
+interface GetChildrenVisibleType {
+  (node: HTMLElement): boolean[]
+}
+
 /** Pegar as posições dos filhos do nó */
 interface GetChildrenPositionsType {
   (node: HTMLElement, origin?: 'left' | 'right' | 'center'): number[]
@@ -57,6 +67,21 @@ export const getNearestNumber: GetNearestNumberType = (value) => (
 export const getChildrenWidths: GetChildrenWidthsType = (node) => {
   const children = parseHtmlCollectionToArray(node.children)
   return children.map((el: HTMLElement) => getOffsetWidth(el))
+}
+
+export const getChildrenRange: GetChildrenRangeType = (node) => {
+  const children = parseHtmlCollectionToArray(node.children)
+
+  return children.map((el: HTMLElement) => {
+    const start = el.offsetLeft - node.scrollLeft
+    return [start, start + el.offsetWidth]
+  })
+}
+
+export const getChildrenVisible: GetChildrenVisibleType = (node) => {
+  const children = getChildrenRange(node)
+  console.log(children[19])
+  return children.map((range) => range[0] >= 0 && range[1] <= node.offsetWidth)
 }
 
 export const getChildrenPositions: GetChildrenPositionsType = (

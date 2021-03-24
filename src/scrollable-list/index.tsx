@@ -2,12 +2,19 @@ import React, { useEffect, useState } from 'react'
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 import { CSSProperties } from 'styled-components'
 import { testIsSSR } from '../utils'
+import Indicator from './navigation-dots'
 import { ScrollableWrapper, ScrollButton } from './styled'
 import {
   animatedScrollTo,
   getChildrenPositions,
   getNearestNumber,
+  parseHtmlCollectionToArray,
+  getChildrenVisible,
 } from './utils'
+
+interface ParentObservableProps {
+  __iObserver?: IntersectionObserver
+}
 
 interface CustomCSSProps {
   /** _Default_ '0.5rem' */
@@ -31,6 +38,8 @@ export interface ScrollableListProps {
   pagination?: boolean
   /** @default 1 */
   paginationStep?: 'full' | number
+  /** @default false */
+  hasIndicator?: boolean
   /** @default 'none' */
   snap?: 'none' | 'start' | 'center'
   /** @default 'proximity' */
@@ -43,6 +52,7 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   children,
   ordered = false,
   pagination = false,
+  hasIndicator = true,
   paginationStep = 1,
   snap = 'start',
   snapType = 'proximity',
@@ -51,11 +61,62 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   const ListType = ordered ? 'ol' : 'ul'
   const [hasPointer, setHasPointer] = useState<boolean>(true)
   const [position, setPosition] = useState<number>(0)
+  const [length, setLenght] = useState<number>(0)
+  const [visibleChildren, setVisibleChildren] = useState<boolean[]>([])
   const [isLastPosition, setIsLastPosition] = useState<boolean>(false)
-  const [scrollNode, setScrollNode] = useState<
-    HTMLUListElement | HTMLOListElement
+  const [parent, setParent] = useState<
+    | (HTMLUListElement & ParentObservableProps)
+    | (HTMLOListElement & ParentObservableProps)
   >(null)
   const isSSR = testIsSSR()
+
+  useEffect(() => {
+    if (!parent) return
+
+    const handleScroll = () => {
+      const parentPosition = parent.scrollLeft
+      const parentFullWidth = parent.scrollWidth
+      const visibleWidth = parent.parentElement.offsetWidth
+      const childrenPositions = getChildrenPositions(parent)
+
+      const parentEndPadding = parseInt(parent.style.paddingInlineEnd) || 32
+      const lastPosition =
+        parentFullWidth - parentPosition <= visibleWidth + parentEndPadding
+
+      const visibleChildren = getChildrenVisible(parent)
+      const currentPos = visibleChildren.findIndex((e) => e)
+      if (currentPos >= 0) {
+        setPosition(currentPos)
+      }
+
+      setVisibleChildren(visibleChildren)
+      setIsLastPosition(lastPosition)
+      setLenght(childrenPositions.length)
+    }
+
+    const mutation = new MutationObserver((ml) => {
+      for (const m of ml) {
+        if (m.type === 'childList') {
+          handleScroll()
+        }
+      }
+    })
+    mutation.observe(parent, {
+      childList: true,
+    })
+
+    const asyncHandleScroll = () => {
+      setTimeout(handleScroll, 0)
+    }
+
+    parent.addEventListener('scroll', asyncHandleScroll)
+    handleScroll()
+
+    return () => {
+      parent.removeEventListener('scroll', asyncHandleScroll)
+      mutation.disconnect()
+    }
+  }, [parent])
 
   useEffect(() => {
     !isSSR &&
@@ -65,80 +126,36 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
       : setHasPointer(false)
   }, [hasPointer, isSSR])
 
-  useEffect(() => {
-    if (scrollNode) {
-      const handleScroll = () => {
-        const scrollNodePosition = scrollNode.scrollLeft
-        const scrollNodeFullWidth = scrollNode.scrollWidth
-        const scrollNodeWidth = scrollNode.parentElement.offsetWidth
-        const childrenScrollX = getChildrenPositions(scrollNode)
-        const nearestPosition = childrenScrollX.reduce(
-          getNearestNumber(
-            scrollNodePosition + (snap === 'center' ? scrollNodeWidth / 2 : 0),
-          ),
-        )
-        const scrollPosition = childrenScrollX.findIndex(
-          (el) => el === nearestPosition,
-        )
-
-        const lastPosition =
-          scrollNodeFullWidth - scrollNodePosition <= scrollNodeWidth + 32
-
-        setPosition(scrollPosition)
-        setIsLastPosition(lastPosition)
-      }
-
-      const mutation = new MutationObserver((ml) => {
-        for (const m of ml) {
-          if (m.type === 'childList') {
-            handleScroll()
-          }
-        }
-      })
-
-      scrollNode.addEventListener('scroll', handleScroll)
-      mutation.observe(scrollNode, {
-        childList: true,
-      })
-      handleScroll()
-
-      return () => {
-        scrollNode.removeEventListener('scroll', handleScroll)
-        mutation.disconnect()
-      }
-    }
-  }, [scrollNode])
-
-  const scrollForwards = () => {
-    if (scrollNode && pagination) {
-      if (paginationStep === 'full') {
-        animatedScrollTo(scrollNode, scrollNode.parentElement.offsetWidth)
-      } else {
-        const pos = position + paginationStep
-        const validPos =
-          pos >= scrollNode.children.length
-            ? scrollNode.children.length - 1
-            : pos
-
-        const child = scrollNode.children[validPos]
-        animatedScrollTo(scrollNode, child as HTMLElement)
-      }
-    }
+  const validatePosition = (pos: number) => {
+    if (pos < 0) return 0
+    if (pos >= parent.children.length) return parent.children.length - 1
+    return pos
   }
 
-  const scrollBackwards = () => {
-    if (scrollNode && pagination) {
-      if (paginationStep === 'full') {
-        animatedScrollTo(scrollNode, -scrollNode.parentElement.offsetWidth)
-      } else {
-        const pos = position - paginationStep
-        const validPos = pos < 0 ? 0 : pos
-
-        const child = scrollNode.children[validPos]
-        animatedScrollTo(scrollNode, child as HTMLElement)
-      }
-    }
+  const scrollToPosition = (targetPosition: number) => {
+    const validPosition = validatePosition(targetPosition)
+    const child = parent.children[validPosition]
+    animatedScrollTo(parent, child as HTMLElement)
   }
+
+  const scrollToDirection = (direction: 'backwards' | 'forwards') => {
+    if (!pagination || !parent) return
+    const visibleWidth = parent.parentElement.offsetWidth
+    const scrollAmount =
+      direction === 'backwards' ? -visibleWidth : visibleWidth
+    if (paginationStep === 'full') {
+      animatedScrollTo(parent, scrollAmount)
+      return
+    }
+    const targetPosition =
+      direction === 'backwards'
+        ? position - paginationStep
+        : position + paginationStep
+    scrollToPosition(targetPosition)
+  }
+
+  const scrollForwards = () => scrollToDirection('forwards')
+  const scrollBackwards = () => scrollToDirection('backwards')
 
   return (
     <ScrollableWrapper style={style} snapType={snapType} snap={snap}>
@@ -147,11 +164,19 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
           <MdChevronLeft />
         </ScrollButton>
       )}
-      <ListType ref={setScrollNode}>{children}</ListType>
+      <ListType ref={setParent}>{children}</ListType>
       {pagination && hasPointer && !isLastPosition && (
         <ScrollButton onClick={scrollForwards} position='right'>
           <MdChevronRight />
         </ScrollButton>
+      )}
+      {pagination && hasIndicator && (
+        <Indicator
+          active={position}
+          length={length}
+          group={visibleChildren}
+          onClick={scrollToPosition}
+        />
       )}
     </ScrollableWrapper>
   )
