@@ -5,44 +5,28 @@ interface ParseHtmlCollectionToArrayType {
   (el: HTMLCollection): Element[]
 }
 
-/** Retorna a posição do elemento em relação ao início da lista */
-interface GetOffsetLeftType {
-  (el: HTMLElement): number
-}
-
-/** Retorna a largura do elemento */
-interface GetOffsetWidthType {
-  (el: HTMLElement): number
-}
-
-/** Redução do número mais próximo */
-interface GetNearestNumberType {
-  (value: number): (prev: number, current: number) => number
-}
-
-/** Pegar as larguras dos filhos do nó */
-interface GetChildrenWidthsType {
-  (node: HTMLElement): number[]
-}
-
 /** Pegar as distancias dos filhos do nó */
 interface GetChildrenRangeType {
   (node: HTMLElement): [number, number][]
 }
 
-/** Pegar as quais dos filhos do estão visiveis */
-interface GetChildrenVisibleType {
-  (node: HTMLElement): boolean[]
+/** Pegar índice dos filhos mais próximos a posição */
+interface GetNearestChildIndexType {
+  (node: HTMLElement, align?: 'none' | 'start' | 'center'): number
 }
 
-/** Pegar as posições dos filhos do nó */
-interface GetChildrenPositionsType {
-  (node: HTMLElement, origin?: 'left' | 'right' | 'center'): number[]
+/** Pegar as quais dos filhos do estão visiveis */
+interface GetChildrenVisibleType {
+  (node: HTMLElement, partial?: boolean): boolean[]
 }
 
 /** Anima o scroll para posição ou elemento */
 interface AnimatedScrollToType {
-  (node: HTMLElement, val: HTMLElement | number): void
+  (
+    node: HTMLElement,
+    val: HTMLElement | number,
+    align?: 'none' | 'start' | 'center',
+  ): void
 }
 
 export const parseHtmlCollectionToArray: ParseHtmlCollectionToArrayType = (
@@ -55,64 +39,60 @@ export const parseHtmlCollectionToArray: ParseHtmlCollectionToArrayType = (
   return result
 }
 
-export const getOffsetLeft: GetOffsetLeftType = (el) => el.offsetLeft
-
-export const getOffsetWidth: GetOffsetWidthType = (el) => el.offsetWidth
-
-export const getNearestNumber: GetNearestNumberType = (value) => (
-  prev,
-  current,
-) => (Math.abs(current - value) < Math.abs(prev - value) ? current : prev)
-
-export const getChildrenWidths: GetChildrenWidthsType = (node) => {
-  const children = parseHtmlCollectionToArray(node.children)
-  return children.map((el: HTMLElement) => getOffsetWidth(el))
-}
-
 export const getChildrenRange: GetChildrenRangeType = (node) => {
   const children = parseHtmlCollectionToArray(node.children)
 
-  return children.map((el: HTMLElement) => {
+  return children.map((el: HTMLElement, i, l) => {
+    const isLast = i === l.length - 1
+    const fix = isLast ? parseInt(el.style.paddingInlineEnd) || 32 : 0
     const start = el.offsetLeft - node.scrollLeft
-    return [start, start + el.offsetWidth]
+    return [start, start + el.offsetWidth - fix]
   })
 }
 
-export const getChildrenVisible: GetChildrenVisibleType = (node) => {
-  const children = getChildrenRange(node)
-  console.log(children[19])
-  return children.map((range) => range[0] >= 0 && range[1] <= node.offsetWidth)
-}
-
-export const getChildrenPositions: GetChildrenPositionsType = (
+export const getChildrenVisible: GetChildrenVisibleType = (
   node,
-  origin = 'left',
+  partial = false,
 ) => {
-  const children = parseHtmlCollectionToArray(node.children)
-  return children.map((el: HTMLElement) => {
-    const width = getOffsetWidth(el)
-    const position = getOffsetLeft(el)
-    switch (origin) {
-      case 'right':
-        return position + width
-      case 'center':
-        return position + width / 2
-      case 'left':
-      default:
-        return position
-    }
+  const children = getChildrenRange(node)
+  return children.map((range) => {
+    if (!partial) return range[0] >= 0 && range[1] <= node.offsetWidth
+    return range[1] >= 0 && range[0] <= node.offsetWidth
   })
 }
 
-export const animatedScrollTo: AnimatedScrollToType = (node, val) => {
+export const getNearestChildIndex: GetNearestChildIndexType = (
+  node,
+  align = 'none',
+) => {
+  const width = node.offsetWidth
+  const position = align !== 'center' ? 0 : width / 2
+  const children = getChildrenRange(node).map((v) => {
+    return align !== 'center' ? v[0] : v[0] + (v[1] - v[0]) / 2
+  })
+  const closest = children.reduce((prev, pos) => {
+    return Math.abs(pos - position) < Math.abs(Math.abs(prev - position))
+      ? pos
+      : prev
+  }, Infinity)
+  return children.indexOf(closest)
+}
+
+export const animatedScrollTo: AnimatedScrollToType = (
+  node,
+  val,
+  align = 'none',
+) => {
   if (testIsSSR()) return false
   let distance = -1
   const testPositions = () => distance < 0
   const start: number = +window.getComputedStyle(node).paddingInlineStart || 16
   const scrollPos: number = node.scrollLeft
+  const width: number = node.offsetWidth
 
   if (val instanceof HTMLElement && testPositions()) {
-    distance = val.offsetLeft - scrollPos
+    if (align !== 'center') distance = val.offsetLeft - scrollPos
+    else distance = val.offsetLeft - scrollPos + val.offsetWidth / 2 - width / 2
   } else {
   }
   if (!isNaN(parseFloat(val as any)) && testPositions()) {

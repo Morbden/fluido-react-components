@@ -8,8 +8,13 @@ interface NavigationDotsProps {
   onClick?: (index: number) => void
 }
 
+interface BlockProps {
+  start?: number
+  size?: number
+}
+
 const StyledNavigationDots = styled.div`
-  --dots-color: var(--on-surface-divider, gray);
+  --dots-color: var(--on-surface-disabled, gray);
   bottom: -2rem;
   display: flex;
   align-items: center;
@@ -24,13 +29,6 @@ const StyledNavigationDots = styled.div`
     border-radius: 999px;
     z-index: -1;
   }
-`
-const Debug = styled.div`
-  position: absolute;
-  width: 100%;
-  bottom: -5rem;
-  display: flex;
-  justify-content: center;
 `
 
 const Range = styled.input`
@@ -94,10 +92,6 @@ const Range = styled.input`
     outline: none;
   }
 `
-interface BlockProps {
-  start?: number
-  size?: number
-}
 
 const Block = styled.div<BlockProps>`
   position: absolute;
@@ -106,6 +100,8 @@ const Block = styled.div<BlockProps>`
   border-radius: 999px;
   left: calc(0.25rem + ${(p) => p.start}rem);
   background-color: var(--primary);
+  opacity: 0.6;
+  transition: all 50ms ease;
 `
 
 const NavigationDots: React.FC<NavigationDotsProps> = ({
@@ -119,7 +115,6 @@ const NavigationDots: React.FC<NavigationDotsProps> = ({
   const blockWidth = group.reduce((p, e) => p + (e ? 1 : 0), 0)
   return (
     <StyledNavigationDots>
-      <Debug>{group.join(', ')}</Debug>
       <Block start={blockStart} size={blockWidth} />
       <Range
         type='range'

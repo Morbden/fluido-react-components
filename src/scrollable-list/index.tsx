@@ -6,10 +6,8 @@ import Indicator from './navigation-dots'
 import { ScrollableWrapper, ScrollButton } from './styled'
 import {
   animatedScrollTo,
-  getChildrenPositions,
-  getNearestNumber,
-  parseHtmlCollectionToArray,
   getChildrenVisible,
+  getNearestChildIndex,
 } from './utils'
 
 interface ParentObservableProps {
@@ -61,9 +59,11 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   const ListType = ordered ? 'ol' : 'ul'
   const [hasPointer, setHasPointer] = useState<boolean>(true)
   const [position, setPosition] = useState<number>(0)
-  const [length, setLenght] = useState<number>(0)
+  const [length, setLength] = useState<number>(0)
   const [visibleChildren, setVisibleChildren] = useState<boolean[]>([])
-  const [isLastPosition, setIsLastPosition] = useState<boolean>(false)
+  const [visibleChildrenPartial, setVisibleChildrenPartial] = useState<
+    boolean[]
+  >([])
   const [parent, setParent] = useState<
     | (HTMLUListElement & ParentObservableProps)
     | (HTMLOListElement & ParentObservableProps)
@@ -74,24 +74,14 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
     if (!parent) return
 
     const handleScroll = () => {
-      const parentPosition = parent.scrollLeft
-      const parentFullWidth = parent.scrollWidth
-      const visibleWidth = parent.parentElement.offsetWidth
-      const childrenPositions = getChildrenPositions(parent)
-
-      const parentEndPadding = parseInt(parent.style.paddingInlineEnd) || 32
-      const lastPosition =
-        parentFullWidth - parentPosition <= visibleWidth + parentEndPadding
-
       const visibleChildren = getChildrenVisible(parent)
-      const currentPos = visibleChildren.findIndex((e) => e)
-      if (currentPos >= 0) {
-        setPosition(currentPos)
-      }
+      const visibleChildrenPartial = getChildrenVisible(parent, true)
+      const currentPos = getNearestChildIndex(parent, snap)
 
+      setPosition(currentPos)
       setVisibleChildren(visibleChildren)
-      setIsLastPosition(lastPosition)
-      setLenght(childrenPositions.length)
+      setVisibleChildrenPartial(visibleChildrenPartial)
+      setLength(parent.children.length)
     }
 
     const mutation = new MutationObserver((ml) => {
@@ -116,7 +106,7 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
       parent.removeEventListener('scroll', asyncHandleScroll)
       mutation.disconnect()
     }
-  }, [parent])
+  }, [parent, snap])
 
   useEffect(() => {
     !isSSR &&
@@ -135,7 +125,7 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   const scrollToPosition = (targetPosition: number) => {
     const validPosition = validatePosition(targetPosition)
     const child = parent.children[validPosition]
-    animatedScrollTo(parent, child as HTMLElement)
+    animatedScrollTo(parent, child as HTMLElement, snap)
   }
 
   const scrollToDirection = (direction: 'backwards' | 'forwards') => {
@@ -144,7 +134,7 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
     const scrollAmount =
       direction === 'backwards' ? -visibleWidth : visibleWidth
     if (paginationStep === 'full') {
-      animatedScrollTo(parent, scrollAmount)
+      animatedScrollTo(parent, scrollAmount, snap)
       return
     }
     const targetPosition =
@@ -159,22 +149,24 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
 
   return (
     <ScrollableWrapper style={style} snapType={snapType} snap={snap}>
-      {pagination && hasPointer && position !== 0 && (
+      {pagination && hasPointer && !visibleChildren[0] && (
         <ScrollButton onClick={scrollBackwards} position='left'>
           <MdChevronLeft />
         </ScrollButton>
       )}
       <ListType ref={setParent}>{children}</ListType>
-      {pagination && hasPointer && !isLastPosition && (
-        <ScrollButton onClick={scrollForwards} position='right'>
-          <MdChevronRight />
-        </ScrollButton>
-      )}
+      {pagination &&
+        hasPointer &&
+        !visibleChildren[visibleChildren.length - 1] && (
+          <ScrollButton onClick={scrollForwards} position='right'>
+            <MdChevronRight />
+          </ScrollButton>
+        )}
       {pagination && hasIndicator && (
         <Indicator
           active={position}
           length={length}
-          group={visibleChildren}
+          group={visibleChildrenPartial}
           onClick={scrollToPosition}
         />
       )}
