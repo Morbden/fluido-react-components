@@ -1,4 +1,4 @@
-import React, { MouseEventHandler, useEffect, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 import { CSSProperties } from 'styled-components'
 import { testIsSSR } from '../utils'
