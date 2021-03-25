@@ -118,6 +118,8 @@ export const allProps = Template.bind({})
 allProps.args = {
   childSize: 20,
   pagination: true,
+  hasIndicator: true,
+  shouldShowPartials: true,
   paginationStep: 2,
   snap: 'start',
   snapType: 'mandatory',
@@ -129,6 +131,8 @@ export const fullScreen = Template2.bind({})
 fullScreen.args = {
   childSize: 20,
   pagination: true,
+  hasIndicator: true,
+  shouldShowPartials: false,
   paginationStep: 1,
   snap: 'center',
   snapType: 'mandatory',

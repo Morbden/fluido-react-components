@@ -38,6 +38,8 @@ export interface ScrollableListProps {
   paginationStep?: 'full' | number
   /** @default false */
   hasIndicator?: boolean
+  /** @default false */
+  shouldShowPartials?: boolean
   /** @default 'none' */
   snap?: 'none' | 'start' | 'center'
   /** @default 'proximity' */
@@ -51,6 +53,7 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   ordered = false,
   pagination = false,
   hasIndicator = false,
+  shouldShowPartials = false,
   paginationStep = 1,
   snap = 'start',
   snapType = 'proximity',
@@ -166,7 +169,7 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
         <Indicator
           active={position}
           length={length}
-          group={visibleChildrenPartial}
+          group={shouldShowPartials ? visibleChildrenPartial : visibleChildren}
           onClick={scrollToPosition}
         />
       )}
