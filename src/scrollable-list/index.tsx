@@ -141,6 +141,7 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
     parent.addEventListener('scroll', asyncHandleScroll)
     parent.addEventListener('mousedown', handleDragStart)
     window.addEventListener('mousemove', handleDrag)
+    window.addEventListener('mouseup', handleClick)
     window.addEventListener('click', handleClick)
     handleScroll()
 
@@ -148,6 +149,7 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
       parent.removeEventListener('scroll', asyncHandleScroll)
       parent.removeEventListener('mousedown', handleDragStart)
       window.removeEventListener('mousemove', handleDrag)
+      window.removeEventListener('mouseup', handleClick)
       window.removeEventListener('click', handleClick)
       mutation.disconnect()
     }
