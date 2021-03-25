@@ -56,14 +56,12 @@ const RangeDot = styled.div<RangeDotProps>`
   pointer-events: none;
   width: 1rem;
   height: 1rem;
-  border-radius: 99px;
-  transform: scale(var(--thumb-size));
-  background-color: var(--thumb-color);
-  /* background-image: radial-gradient(
-    circle at center,
-    var(--thumb-color) var(--thumb-size),
-    transparent var(--thumb-size)
-  ); */
+  border-radius: var(--thumb-border-radius, 999px);
+  border-style: var(--thumb-border-style, solid);
+  border-width: var(--thumb-border-width, 0);
+  border-color: var(--thumb-border-color, var(--primary, #4285f4));
+  transform: scale(var(--thumb-scale, 0.5));
+  background-color: var(--thumb-color, var(--primary, #4285f4));
   transition: all 250ms ease;
 `
 
@@ -99,21 +97,33 @@ const Range = styled.input`
     cursor: pointer;
   }
 
-  &:focus + * {
-    --thumb-size: 1;
+  &:focus {
     outline: none;
+  }
+  &:focus + * {
+    --thumb-scale: var(--thumb-scale-active, 1);
   }
 `
 
 const Block = styled.div<BlockProps>`
   position: absolute;
-  width: calc(${(p) => p.size}rem - 0.5rem);
-  height: 0.5rem;
-  border-radius: 999px;
-  left: calc(0.25rem + ${(p) => p.start}rem);
-  background-color: var(--primary);
-  opacity: 0.6;
+  display: flex;
+  padding: var(--group-padding-y, 0.75rem) var(--group-padding-x, 0.25rem);
+  width: ${(p) => p.size}rem;
+  height: 2rem;
+  left: ${(p) => p.start}rem;
   transition: all 250ms ease;
+  will-change: transform;
+  &::after {
+    content: '';
+    width: 100%;
+    height: 100%;
+    background-color: var(--group-background, var(--primary, #4285f4));
+    border-radius: var(--group-border-radius, 999px);
+    border-width: var(--group-border-width, 0);
+    border-color: var(--group-border-color, var(--primary, #4285f4));
+    opacity: var(--group-opacity, 1);
+  }
 `
 
 const NavigationDots: React.FC<NavigationDotsProps> = ({

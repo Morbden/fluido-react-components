@@ -30,6 +30,7 @@ export const ScrollableWrapper = styled.div<ScrollableListProps>`
     list-style: none;
     overflow-x: auto;
     overflow-y: visible;
+    cursor: grab;
     padding-inline-start: var(--start);
     padding-inline-end: var(--end);
     padding-top: var(--padding-top);
@@ -41,6 +42,9 @@ export const ScrollableWrapper = styled.div<ScrollableListProps>`
     scroll-behavior: smooth;
     scroll-snap-type: x ${(props) => props.snapType};
     scroll-padding-left: ${(props) => props.snap === 'start' && 'var(--start)'};
+    &:active {
+      cursor: grabbing;
+    }
     &[data-drag] > * {
       user-select: none;
       pointer-events: none;
