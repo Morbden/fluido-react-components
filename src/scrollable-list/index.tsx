@@ -110,15 +110,14 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
         parent.scrollTo({
           left: drag.scroll + distance,
           top: 0,
-          behavior: 'auto',
         })
       }
     }
 
     const handleClick = (ev: MouseEvent) => {
+      drag.click = false
       if (drag.start) {
         drag.start = false
-        drag.click = false
         parent.removeAttribute('data-drag')
         ev.stopPropagation()
       }

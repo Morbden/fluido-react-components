@@ -119,7 +119,7 @@ allProps.args = {
   childSize: 20,
   pagination: true,
   hasIndicator: true,
-  shouldShowPartials: true,
+  shouldShowPartials: false,
   paginationStep: 2,
   snap: 'start',
   snapType: 'mandatory',
