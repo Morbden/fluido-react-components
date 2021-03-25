@@ -50,7 +50,7 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   children,
   ordered = false,
   pagination = false,
-  hasIndicator = true,
+  hasIndicator = false,
   paginationStep = 1,
   snap = 'start',
   snapType = 'proximity',
@@ -60,7 +60,7 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
   const [hasPointer, setHasPointer] = useState<boolean>(true)
   const [position, setPosition] = useState<number>(0)
   const [length, setLength] = useState<number>(0)
-  const [visibleChildren, setVisibleChildren] = useState<boolean[]>([])
+  const [visibleChildren, setVisibleChildren] = useState<boolean[]>([true])
   const [visibleChildrenPartial, setVisibleChildrenPartial] = useState<
     boolean[]
   >([])
