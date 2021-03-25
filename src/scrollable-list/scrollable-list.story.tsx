@@ -90,7 +90,7 @@ const Template: Story<ScrollableListProps & ExtraProps> = ({
     {Array(childSize)
       .fill(0)
       .map((_, i) => (
-        <li key={i}>
+        <li key={i} onClick={() => console.log('child click')}>
           <Box>{i + 1}</Box>
         </li>
       ))}

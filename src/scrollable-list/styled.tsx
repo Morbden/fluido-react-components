@@ -41,6 +41,10 @@ export const ScrollableWrapper = styled.div<ScrollableListProps>`
     scroll-behavior: smooth;
     scroll-snap-type: x ${(props) => props.snapType};
     scroll-padding-left: ${(props) => props.snap === 'start' && 'var(--start)'};
+    &[data-drag] > * {
+      user-select: none;
+      pointer-events: none;
+    }
     & > * {
       scroll-snap-align: ${(props) => props.snap};
       &:last-child {

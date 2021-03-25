@@ -36,7 +36,7 @@ const StyledNavigationDots = styled.div`
 `
 
 const Label = styled.label`
-  --thumb-size: 0.25rem;
+  --thumb-size: 0.5;
   --thumb-color: var(--primary, #4285f4);
 
   position: absolute;
@@ -56,11 +56,14 @@ const RangeDot = styled.div<RangeDotProps>`
   pointer-events: none;
   width: 1rem;
   height: 1rem;
-  background-image: radial-gradient(
+  border-radius: 99px;
+  transform: scale(var(--thumb-size));
+  background-color: var(--thumb-color);
+  /* background-image: radial-gradient(
     circle at center,
     var(--thumb-color) var(--thumb-size),
     transparent var(--thumb-size)
-  );
+  ); */
   transition: all 250ms ease;
 `
 
@@ -79,11 +82,6 @@ const Range = styled.input`
     width: 1rem;
     border: none;
     background: transparent;
-    /* background-image: radial-gradient(
-      circle at center,
-      var(--thumb-color) var(--thumb-size),
-      transparent var(--thumb-size)
-    ); */
     cursor: pointer;
   }
   &::-moz-range-thumb {
@@ -91,11 +89,6 @@ const Range = styled.input`
     width: 1rem;
     border: none;
     background: transparent;
-    /* background-image: radial-gradient(
-      circle at center,
-      var(--thumb-color) var(--thumb-size),
-      transparent var(--thumb-size)
-    ); */
     cursor: pointer;
   }
   &::-ms-thumb {
@@ -103,17 +96,11 @@ const Range = styled.input`
     width: 1rem;
     border: none;
     background: transparent;
-    /* background-image: radial-gradient(
-      circle at center,
-      var(--thumb-color) var(--thumb-size),
-      transparent var(--thumb-size)
-    ); */
     cursor: pointer;
   }
 
-  &:focus,
   &:focus + * {
-    --thumb-size: 0.5rem;
+    --thumb-size: 1;
     outline: none;
   }
 `

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { MouseEventHandler, useEffect, useState } from 'react'
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md'
 import { CSSProperties } from 'styled-components'
 import { testIsSSR } from '../utils'
@@ -87,6 +87,43 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
       setLength(parent.children.length)
     }
 
+    const drag = {
+      click: false,
+      start: false,
+      position: 0,
+      scroll: 0,
+    }
+
+    const handleDragStart = (ev: MouseEvent) => {
+      drag.position = ev.clientX
+      drag.scroll = parent.scrollLeft
+      drag.click = true
+    }
+
+    const handleDrag = (ev: MouseEvent) => {
+      if (!drag.click) return
+      const currentPosition = ev.clientX
+      const distance = drag.position - currentPosition
+      if (drag.start || Math.abs(distance)) {
+        parent.setAttribute('data-drag', distance.toString())
+        drag.start = true
+        parent.scrollTo({
+          left: drag.scroll + distance,
+          top: 0,
+          behavior: 'auto',
+        })
+      }
+    }
+
+    const handleClick = (ev: MouseEvent) => {
+      if (drag.start) {
+        drag.start = false
+        drag.click = false
+        parent.removeAttribute('data-drag')
+        ev.stopPropagation()
+      }
+    }
+
     const mutation = new MutationObserver((ml) => {
       for (const m of ml) {
         if (m.type === 'childList') {
@@ -103,10 +140,16 @@ const ScrollableList: React.FC<ScrollableListProps> = ({
     }
 
     parent.addEventListener('scroll', asyncHandleScroll)
+    parent.addEventListener('mousedown', handleDragStart)
+    window.addEventListener('mousemove', handleDrag)
+    window.addEventListener('click', handleClick)
     handleScroll()
 
     return () => {
       parent.removeEventListener('scroll', asyncHandleScroll)
+      parent.removeEventListener('mousedown', handleDragStart)
+      window.removeEventListener('mousemove', handleDrag)
+      window.removeEventListener('click', handleClick)
       mutation.disconnect()
     }
   }, [parent, snap])
