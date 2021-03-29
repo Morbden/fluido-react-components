@@ -134,10 +134,9 @@ const NavigationDots: React.FC<NavigationDotsProps> = ({
 }) => {
   const indicatorList = new Array(length).fill(0)
   const blockStart = group.findIndex((e, i) => e || active === i)
-  const blockWidth = group.reduce(
-    (p, e, i) => p + (e || active === i ? 1 : 0),
-    0,
-  )
+  const blockWidth = group.length
+    ? group.reduce((p, e, i) => p + (e || active === i ? 1 : 0), 0)
+    : 0
   return (
     <StyledNavigationDots>
       <Block start={blockStart} size={blockWidth} />

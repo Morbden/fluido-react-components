@@ -70,12 +70,14 @@ export const getNearestChildIndex: GetNearestChildIndexType = (
   const children = getChildrenRange(node).map((v) => {
     return align !== 'center' ? v[0] : v[0] + (v[1] - v[0]) / 2
   })
-  const closest = children.reduce((prev, pos) => {
-    return Math.abs(pos - position) < Math.abs(Math.abs(prev - position))
-      ? pos
-      : prev
-  }, Infinity)
-  return children.indexOf(closest)
+  const closest = children.length
+    ? children.reduce((prev, pos) => {
+        return Math.abs(pos - position) < Math.abs(Math.abs(prev - position))
+          ? pos
+          : prev
+      }, Infinity)
+    : null
+  return closest ? children.indexOf(closest) : -1
 }
 
 export const animatedScrollTo: AnimatedScrollToType = (

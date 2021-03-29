@@ -1,23 +1,21 @@
 import cx from 'classnames'
 import { forwardRef, useEffect, useState } from 'react'
-import { testIsSSR } from '../utils'
+import { MdKeyboardArrowDown } from 'react-icons/md'
 import styled from 'styled-components'
+import { testIsSSR } from '../utils'
 
-export interface TextFieldProps {
+export interface SelectFieldProps {
   name: string
   label?: string
   placeholder?: string
-  type?: string
-  trailing?: React.ReactNode
   leading?: React.ReactNode
-  maskConfig?: string | string[] | Inputmask.Options
   error?: string
   disabled?: boolean
   required?: boolean
   [key: string]: any
 }
 
-const StyledTextField = styled.label`
+const StyledSelectField = styled.label`
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -33,7 +31,8 @@ const StyledTextField = styled.label`
     margin-left: 1rem;
   }
 
-  input {
+  select {
+    appearance: none;
     background-color: var(--surface);
     color: var(--on-surface-high-emphasis);
     padding: 0.5rem 1rem;
@@ -42,18 +41,18 @@ const StyledTextField = styled.label`
     border: 1px solid var(--on-surface-divider);
     outline: none;
   }
-  input:disabled {
+  select:disabled {
     color: var(--on-surface-disabled);
   }
+  option {
+    line-height: 2.5rem;
+  }
 
-  &.with-leading input {
+  &.with-leading select {
     padding-left: 2.5rem;
   }
-  &.with-trailing input {
-    padding-right: 2.5rem;
-  }
 
-  .trailing,
+  .icon-key,
   .leading {
     position: absolute;
     top: calc(50% + 1px);
@@ -62,10 +61,9 @@ const StyledTextField = styled.label`
   .leading {
     left: 0.5rem;
   }
-  .trailing {
+  .icon-key {
     right: 0.5rem;
   }
-
   .wrapper {
     display: flex;
     flex-direction: column;
@@ -73,33 +71,31 @@ const StyledTextField = styled.label`
     position: relative;
   }
 
-  .input-error {
+  .select-error {
     min-height: 1.25rem;
     color: var(--error);
   }
 `
 
-const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
+const SelectField = forwardRef<HTMLSelectElement, SelectFieldProps>(
   (
     {
       name,
       label,
-      type = 'text',
       placeholder,
       leading,
-      trailing,
       error,
       disabled,
       required,
-      maskConfig,
+      children,
       ...props
     },
     fRef,
   ) => {
-    const [ref, setRef] = useState<HTMLInputElement>(null)
+    const [ref, setRef] = useState<HTMLSelectElement>(null)
     const isSSR = testIsSSR()
 
-    const handleRef = (node: HTMLInputElement) => {
+    const handleRef = (node: HTMLSelectElement) => {
       if (fRef) {
         if (typeof fRef === 'function') {
           fRef(node)
@@ -114,26 +110,13 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
       if (!isSSR && ref && ref.hasAttribute('autofocus')) {
         ref.focus()
       }
-      if (!isSSR && ref && maskConfig) {
-        let iMask: Inputmask.Instance
-        import('inputmask').then((Inputmask) => {
-          const Mask = Inputmask.default
-          iMask = new Mask(maskConfig as any)
-          iMask.mask(ref)
-        })
-
-        return () => {
-          if (iMask) iMask.remove()
-        }
-      }
-    }, [isSSR, ref, maskConfig])
+    }, [isSSR, ref])
 
     return (
-      <StyledTextField
+      <StyledSelectField
         data-disabled={disabled}
         className={cx({
           'with-leading': !!leading,
-          'with-trailing': !!trailing,
         })}>
         {label && (
           <span className='label type-subtitle-2'>
@@ -142,19 +125,20 @@ const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
         )}
         <div className='wrapper'>
           {!!leading && <div className='leading'>{leading}</div>}
-          <input
+          <select
             ref={handleRef}
             placeholder={placeholder}
             disabled={disabled}
             name={name}
-            type={type}
-            {...props}
-          />
-          {!!trailing && <div className='trailing'>{trailing}</div>}
+            {...props}>
+            {children}
+          </select>
+          <MdKeyboardArrowDown className='icon-key' size='24' />
         </div>
         <span className='input-error type-caption'>{error || ''}</span>
-      </StyledTextField>
+      </StyledSelectField>
     )
   },
 )
-export default TextField
+
+export default SelectField
