@@ -7,6 +7,7 @@ import IconButtonMenu from './icon-button-menu'
 import PopMenu from './pop-menu'
 import ProgressBar from './progress-bar'
 import ScrollableList from './scrollable-list'
+import SelectField from './select-field'
 import Snackbar from './snackbar'
 import Surface from './surface'
 import TextField from './text-field'
@@ -24,6 +25,7 @@ export {
   PopMenu,
   ProgressBar,
   ScrollableList,
+  SelectField,
   Snackbar,
   Surface,
   TextField,
