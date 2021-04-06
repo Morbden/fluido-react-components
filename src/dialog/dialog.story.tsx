@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import Dialog, { DialogProps } from './index'
-import '../styles/material.scss'
-import '../styles/typography.scss'
+import '@fluido/sass-styles/lib/material.scss'
+import '@fluido/sass-styles/lib/typography.scss'
 
 const ComponentMeta: Meta = {
   title: 'Dialog',

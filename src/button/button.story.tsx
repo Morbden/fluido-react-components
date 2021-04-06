@@ -1,9 +1,9 @@
 import { Meta, Story } from '@storybook/react'
 import Button, { ButtonProps } from './index'
 import { MdAccountCircle, MdClose } from 'react-icons/md'
-import '../styles/material.scss'
-import '../styles/typography.scss'
-import '../styles/elevation.scss'
+import '@fluido/sass-styles/lib/material.scss'
+import '@fluido/sass-styles/lib/typography.scss'
+import '@fluido/sass-styles/lib/elevation.scss'
 
 const ComponentMeta: Meta = {
   title: 'Button',

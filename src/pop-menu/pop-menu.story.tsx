@@ -1,7 +1,7 @@
 import { Meta, Story } from '@storybook/react'
 import { useState } from 'react'
 import Button from '../button'
-import '../styles/material.scss'
+import '@fluido/sass-styles/lib/material.scss'
 import PopMenu, { PopMenuProps } from './index'
 
 const ComponentMeta: Meta = {

@@ -1,6 +1,6 @@
 import { Meta, Story } from '@storybook/react'
 import { MdMoreVert } from 'react-icons/md'
-import '../styles/material.scss'
+import '@fluido/sass-styles/lib/material.scss'
 import IconButtonMenu, { IconButtonMenuProps } from './index'
 
 const ComponentMeta: Meta = {
