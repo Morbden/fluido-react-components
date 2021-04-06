@@ -1,7 +1,7 @@
 import cx from 'classnames'
 import { forwardRef, useEffect, useState } from 'react'
-import { testIsSSR } from '../utils'
 import styled from 'styled-components'
+import { testIsSSR } from '../utils'
 
 export interface TextFieldProps {
   name: string

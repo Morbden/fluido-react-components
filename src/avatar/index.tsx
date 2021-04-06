@@ -1,7 +1,6 @@
+import Color from 'color'
 import { forwardRef } from 'react'
 import styled from 'styled-components'
-import { useRipple } from '@fluido/react-effects'
-import Color from 'color'
 
 export interface AvatarProps {
   picture?: string

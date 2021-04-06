@@ -1,4 +1,3 @@
-import { State } from '@hookstate/core'
 import cx from 'classnames'
 import { motion } from 'framer-motion'
 import { MouseEventHandler, useEffect } from 'react'
@@ -6,7 +5,6 @@ import { SubmitHandler } from 'react-hook-form'
 import { MdClose } from 'react-icons/md'
 import { Portal } from 'react-portal'
 import styled from 'styled-components'
-import { useMediaQuery } from '@fluido/react-utils'
 import IconButton from '../icon-button'
 import DialogActions from './dialog-actions'
 

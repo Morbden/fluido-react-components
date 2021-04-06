@@ -7,7 +7,7 @@ import { ScrollableWrapper, ScrollButton } from './styled'
 import {
   animatedScrollTo,
   getChildrenVisible,
-  getNearestChildIndex,
+  getNearestChildIndex
 } from './utils'
 
 interface ParentObservableProps {
