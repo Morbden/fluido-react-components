@@ -11,9 +11,6 @@ import SelectField from './select-field'
 import Snackbar from './snackbar'
 import Surface from './surface'
 import TextField from './text-field'
-import useGetMotionValue from './use-get-motion-value'
-import useInViewScrollInterpolation from './use-in-view-scroll-interpolation'
-import useInViewScrollPosition from './use-in-view-scroll-position'
 
 export {
   Avatar,
@@ -29,7 +26,4 @@ export {
   Snackbar,
   Surface,
   TextField,
-  useGetMotionValue,
-  useInViewScrollInterpolation,
-  useInViewScrollPosition,
 }

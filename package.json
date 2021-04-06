@@ -23,23 +23,21 @@
     "pub": "npm publish --access public",
     "pub:all": "run-s build pub",
     "sb": "start-storybook -p 6006",
-    "sb:build": "build-storybook",
-    "dz": "docz dev",
-    "dz:build": "docz build"
+    "sb:build": "build-storybook"
   },
   "dependencies": {
-    "@fluido/react-effects": "^0.1.9",
-    "@fluido/react-utils": "^0.2.2",
+    "@fluido/react-effects": "^0.2.0",
+    "@fluido/react-utils": "^0.3.1",
     "@hookstate/core": "^3.0.6",
-    "@popperjs/core": "^2.9.1",
-    "classnames": "^2.2.6",
+    "@popperjs/core": "^2.9.2",
+    "classnames": "^2.3.1",
     "color": "^3.1.3",
     "dayjs": "^1.10.4",
     "deep-equal": "^2.0.5",
     "deepmerge": "^4.2.2",
-    "framer-motion": "^4.0.3",
+    "framer-motion": "^4.1.2",
     "inputmask": "^5.0.5",
-    "react-hook-form": "^6.15.5",
+    "react-hook-form": "^7.0.3",
     "react-hotkeys-hook": "^3.3.0",
     "react-icons": "^4.2.0",
     "react-popper": "^2.2.5",
@@ -50,14 +48,14 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "sass": "^1.32.8",
-    "styled-components": "^5.2.1"
+    "styled-components": "^5.2.3"
   },
   "devDependencies": {
-    "@storybook/addon-actions": "^6.1.21",
-    "@storybook/addon-essentials": "^6.1.21",
-    "@storybook/addon-links": "^6.1.21",
+    "@storybook/addon-actions": "^6.2.3",
+    "@storybook/addon-essentials": "^6.2.3",
+    "@storybook/addon-links": "^6.2.3",
     "@storybook/preset-scss": "^1.0.3",
-    "@storybook/react": "^6.1.21",
+    "@storybook/react": "^6.2.3",
     "@types/classnames": "^2.2.11",
     "@types/color": "^3.0.1",
     "@types/inputmask": "^5.0.0",
@@ -74,7 +72,7 @@
     "sass": "^1.32.8",
     "sass-loader": "^10.1.1",
     "style-loader": "^2.0.0",
-    "styled-components": "^5.2.1",
+    "styled-components": "^5.2.3",
     "typescript": "^4.2.3"
   }
 }
