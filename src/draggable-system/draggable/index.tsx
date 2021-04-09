@@ -16,9 +16,14 @@ const StyledDraggable = styled.div`
   border: 1px solid var(--on-surface-divider);
   background-color: var(--surface);
   color: var(--on-surface-high-emphasis);
-  top: calc(var(--move-parent-y, 0px) + var(--move-child-y, 0px));
-  left: calc(var(--move-parent-x, 0px) + var(--move-child-x, 0px));
-  will-change: transform, left, top;
+  top: 0;
+  left: 0;
+  will-change: transform;
+  transform: translate3d(
+    calc(var(--move-parent-x, 0px) + var(--move-child-x, 0px)),
+    calc(var(--move-parent-y, 0px) + var(--move-child-y, 0px)),
+    0
+  );
   cursor: default;
 `
 

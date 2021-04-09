@@ -41,14 +41,16 @@ const StyledInfinityContainer = styled.div`
     background-color: var(--grid-main-line);
   }
   &::before {
-    top: calc(var(--move-parent-y, 0) - 1px);
+    top: -1px;
     left: 0;
+    transform: translate3d(0, calc(var(--move-parent-y, 0) - 1px), 0);
     height: 2px;
     width: 100%;
   }
   &::after {
     top: 0;
-    left: var(--move-parent-x, 0);
+    left: -1px;
+    transform: translate3d(calc(var(--move-parent-x, 0) - 1px), 0, 0);
     height: 100%;
     width: 2px;
   }
