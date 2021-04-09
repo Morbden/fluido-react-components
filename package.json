@@ -36,6 +36,7 @@
     "deepmerge": "^4.2.2",
     "framer-motion": "^4.1.2",
     "inputmask": "^5.0.5",
+    "interactjs": "^1.10.11",
     "react-hook-form": "^7.0.3",
     "react-hotkeys-hook": "^3.3.0",
     "react-icons": "^4.2.0",

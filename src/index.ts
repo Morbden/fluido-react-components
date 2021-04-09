@@ -2,6 +2,8 @@ import Avatar from './avatar'
 import Badge from './badge'
 import Button from './button'
 import Dialog from './dialog'
+import Draggable from './draggable-system/draggable'
+import InfinityContainer from './draggable-system/infinity-container'
 import IconButton from './icon-button'
 import IconButtonMenu from './icon-button-menu'
 import PopMenu from './pop-menu'
@@ -17,8 +19,10 @@ export {
   Badge,
   Button,
   Dialog,
+  Draggable,
   IconButton,
   IconButtonMenu,
+  InfinityContainer,
   PopMenu,
   ProgressBar,
   ScrollableList,
