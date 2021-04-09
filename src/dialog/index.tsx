@@ -12,6 +12,7 @@ export interface DialogProps {
   title?: string
   open?: boolean
   lock?: boolean
+  loading?: boolean
   fullscreen?: boolean
   browser?: boolean
   actions?: {
@@ -87,9 +88,15 @@ const StyledDialog = styled.div`
     max-height: 100%;
     background-color: var(--surface);
     border: 2px solid var(--on-surface-divider);
-    display: flex;
-    flex-direction: column;
-    align-items: stretch;
+    fieldset {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      width: 100%;
+      padding: 0;
+      margin: 0;
+      border: none;
+    }
   }
 
   .dialog.sm {
@@ -98,7 +105,7 @@ const StyledDialog = styled.div`
     max-width: 40rem;
   }
 
-  .dialog > header {
+  .dialog fieldset > header {
     display: flex;
     flex-wrap: nowrap;
     align-items: center;
@@ -106,19 +113,19 @@ const StyledDialog = styled.div`
     border-bottom: 1px solid var(--on-surface-divider, rgba(0, 0, 0, 0.38));
   }
 
-  .dialog > header h1 {
+  .dialog fieldset > header h1 {
     flex: 1 0;
     margin: 0 1rem;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
   }
-  .dialog > div {
+  .dialog fieldset > div {
     flex: 1 0 auto;
     padding: 1rem 1rem 1rem;
   }
 
-  .dialog > footer {
+  .dialog fieldset > footer {
     display: flex;
     flex-direction: row-reverse;
     align-items: center;
@@ -136,6 +143,7 @@ const Dialog: React.FunctionComponent<DialogProps> = ({
   footer,
   title,
   lock,
+  loading,
   open,
   browser = false,
   fullscreen = false,
@@ -193,24 +201,26 @@ const Dialog: React.FunctionComponent<DialogProps> = ({
           animate={open ? 'open' : 'close'}
           onSubmit={onSubmit}
           className={cx('dialog', { sm: !fullscreen })}>
-          <header>
-            <h1 id='dialog-title' className='type-h5'>
-              {title}
-            </h1>
-            {!lock && (
-              <IconButton onClick={handleClose}>
-                <MdClose size='24' />
-              </IconButton>
-            )}
-          </header>
-          <div>{children}</div>
-          <footer>
-            {footer ? (
-              footer
-            ) : (
-              <DialogActions actions={actions} onClose={handleClose} />
-            )}
-          </footer>
+          <fieldset disabled={loading}>
+            <header>
+              <h1 id='dialog-title' className='type-h5'>
+                {title}
+              </h1>
+              {!lock && (
+                <IconButton onClick={handleClose}>
+                  <MdClose size='24' />
+                </IconButton>
+              )}
+            </header>
+            <div>{children}</div>
+            <footer>
+              {footer ? (
+                footer
+              ) : (
+                <DialogActions actions={actions} onClose={handleClose} />
+              )}
+            </footer>
+          </fieldset>
         </motion.form>
       </StyledDialog>
     </Portal>

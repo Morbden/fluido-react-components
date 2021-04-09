@@ -43,3 +43,12 @@ lockMode.args = {
     OK: null,
   },
 }
+export const loadingMode = Template.bind({})
+loadingMode.args = {
+  open: true,
+  loading: true,
+  title: 'Dialog Title',
+  actions: {
+    OK: null,
+  },
+}
